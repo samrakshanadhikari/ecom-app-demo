@@ -2,6 +2,7 @@ import Product from "../models/productModel.js"
 
 //creat product api
 export const createProduct = async (req, res) => {
+    const userId=req.user.id;
     const { productName, productDescription, productPrice, productTotalStockQuantity, totalRating, category } = req.body;
 
     let productImageUrl;
@@ -16,21 +17,55 @@ export const createProduct = async (req, res) => {
         productTotalStockQuantity,
         productImageUrl,
         totalRating,
-        category
+        category,
+        userId
+
+
     })
     res.status(200).json({ message: "Product created successfully", data: products })
 }
 
 //fetch all products
 export const getAllProducts = async (req, res) => {
-    try {
-        const products = await Product.find();
-        res.status(200).json({ message: "Product fetch successfully", data: products })
-    } catch (err) {
-        res.status(500).json({ message: "Internal server error" })
-    }
+    const products = await Product.find();
+    res.status(200).json({ message: "Product fetch successfully", data: products })
+
 }
 
-//singleProduct
-//updateProduct
-//deleteProduct
+
+//single product
+export const fetchSingleProduct = async (req, res) => {
+    const { id } = req.params;
+    const products = await Product.findById(id);
+    if (!products) {
+        return res.status(404).json({ message: "Product not found" })
+    }
+    res.status(200).json({ message: " Single product fetch successfull", data: products })
+}
+
+//update product
+export const updateProduct = async (req, res) => {
+    const { id } = req.params;
+    const { productName, productDescription, productPrice, productTotalStockQuantity, totalRating, category } = req.body;
+    let productImageUrl;
+    if (req.file) {
+        productImageUrl = `${req.file.filename}`
+    }
+
+    const updateProduct = await Product.findByIdAndUpdate(id, { productName, productDescription, productPrice, productTotalStockQuantity, totalRating, category, productImageUrl }, { new: true })
+    if (!updateProduct) {
+        return res.status(404).json({ message: "Product not found" })
+    }
+    res.status(200).json({ message: "Product update successfully", data: updateProduct })
+}
+
+//delete product
+export const deleteProduct= async(req, res)=>{
+    const{id}=req.params;
+    const products= await Product.findByIdAndDelete(id);
+    if(!products){
+        return res.status(404).json({ message: "Product not found" })
+    }
+    res.status(200).json({ message: "Product deleted successfully"})
+
+}
