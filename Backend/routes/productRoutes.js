@@ -16,3 +16,4 @@ router.route("/update/:id").patch(isAuthenticated, restrictTo(Role.Admin),upload
 router.route("/delete/:id").delete(isAuthenticated, restrictTo(Role.Admin), errorHandle(deleteProduct))
 
 export default router;
+

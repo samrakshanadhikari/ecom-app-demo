@@ -5,9 +5,15 @@ export const createProduct = async (req, res) => {
     const userId=req.user.id;
     const { productName, productDescription, productPrice, productTotalStockQuantity, totalRating, category } = req.body;
 
+    
     let productImageUrl;
     if (req.file) {
         productImageUrl = `${req.file.filename}`
+    }
+
+    const existingProducts= await Product.findOne({productName})
+    if(existingProducts){
+         res.status(400).json({ message: "Product name must be unique "})
     }
 
     const products = await Product.create({
@@ -19,8 +25,6 @@ export const createProduct = async (req, res) => {
         totalRating,
         category,
         userId
-
-
     })
     res.status(200).json({ message: "Product created successfully", data: products })
 }
