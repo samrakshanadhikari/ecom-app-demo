@@ -17,6 +17,4 @@ router.route("/:id").get( isAuthenticated, errorHandle(getSingleOrder))
 
 
 
-
-
 export default router

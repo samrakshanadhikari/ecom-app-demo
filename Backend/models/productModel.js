@@ -11,6 +11,7 @@ const productSchema = new mongoose.Schema({
     userId: { type: mongoose.Schema.Types.ObjectId, ref:'User', required: true } //references from user model
 },{timestamps:true});
 
+
 const Product=mongoose.model("Product", productSchema);
 
 export default Product;

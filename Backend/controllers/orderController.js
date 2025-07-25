@@ -114,8 +114,7 @@ export const cancleOrder = async (req, res) => {
 
 
 //feel free to add
-
-
+//review and rating -> if orderStatus delivered xa van matra review or rating dina thau khulnu paro
 
 
 
