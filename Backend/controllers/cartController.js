@@ -41,7 +41,6 @@ export const getCartItem= async(req, res)=>{
    res.status(200).json({message : "Cart item fetch successfully", data:cartData});
 }
 
-
 //update cart item
 export const updateCartItem = async (req, res) => {
     const  userId  = req.user.id;  //optional chaining
@@ -69,7 +68,6 @@ export const updateCartItem = async (req, res) => {
 
 }
 
-
 //delete
 export const deleteCartItem = async (req, res) => {
     const  userId  = req.user.id;  //optional chaining
@@ -81,5 +79,4 @@ export const deleteCartItem = async (req, res) => {
         return res.status(404).json({message : "Cart items not found"})
     }
     res.status(200).json({ message: "Cart item deleted" })
-
 }

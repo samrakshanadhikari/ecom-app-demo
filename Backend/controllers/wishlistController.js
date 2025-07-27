@@ -4,18 +4,14 @@ import User from "../models/userModel.js";
 
 export const addToWishList = async (req, res) => {
     const userId = req.user.id;  //
-    
     const { productId } = req.body; //
-    console.log("ProductId : ", productId)
 
     const product = await Product.findById(productId);
     if (!product) {
-        return res.status(400).json({ message: " Product not found" })
+        return res.status(400).json({ message: " Product not found" });
     }
-    console.log("Product : ", product)
 
     let wishlist = await Wishlist.findOne({ userId });
-    console.log("wishlist : ", wishlist)
     if (!wishlist) {
         wishlist = await Wishlist.create({ userId, products: productId })
     } else {
@@ -28,6 +24,29 @@ export const addToWishList = async (req, res) => {
     res.status(200).json({ message: "Product is successfully added on the wishlist" })
 }
 
-
 //get wishlist 
+export const getWishlist=async(req, res)=>{
+    const userId=req.user.id;
+    const wishlist=await Wishlist.findOne({userId}).populate("products");
+    res.status(200).json({message : "Wishlist successfully fetched", data:wishlist});
+}
+
 //remove from wishlist
+export const removeProductFromWhishlist= async(req, res)=>{
+    const userId=req.user.id;
+    const {productId} =req.body;
+
+   const existingProduct=await Wishlist.findOne({products :productId});
+   if(!existingProduct){
+     return res.status(400).json({ message: "ProdcutId not found" })
+   }
+    const wishlist=await Wishlist.findOneAndUpdate({userId}, {$pull : {products :productId}}, {new :true});
+
+    if(!wishlist){
+         return res.status(400).json({ message: "Wishlist not found" })
+
+    }
+    res.status(200).json({message : "Product is successfully removed from the wishlist", data:wishlist});
+}
+
+

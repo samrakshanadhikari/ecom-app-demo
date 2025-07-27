@@ -81,7 +81,6 @@ export const updateOrderStatus = async (req, res) => {
 
 }
 
-
 // delete order
 export const deleteOrder = async (req, res) => {
     const { id } = req.params;
