@@ -76,6 +76,7 @@ export const getAllUsers = async (req, res) => {
     }
 }
 
+
 //fetch single users
 export const singleUser = async (req, res) => {
     try {

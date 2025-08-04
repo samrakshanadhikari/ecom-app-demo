@@ -1,0 +1,181 @@
+import React, { useState } from 'react';
+import axios from "axios";
+import { useNavigate } from 'react-router-dom';
+import Sidebar from '../../dashboard/sidebar/Sidebar';
+
+const AddProduct = () => {
+  const navigate = useNavigate();
+
+  const [productData, setProductData] = useState({
+    productName: "",
+    productDescription: "",
+    productPrice: null,
+    productTotalStockQuantity: null,
+    totalRating: null,
+    image: null,
+    category: ""
+  });
+
+  const handleChange = (e) => {
+    const { name, value, files, type } = e.target;
+    setProductData(prev => ({
+      ...prev,
+      [name]: type === 'file' ? files[0] : value
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const token = localStorage.getItem('token');
+    const formData = new FormData();
+
+    for (let key in productData) {
+      formData.append(key, productData[key]);
+    }
+
+    try {
+      const response = await axios.post("http://localhost:3000/api/product/create", formData, {
+        headers: {
+          Authorization: `${token}`,
+        }
+      });
+      alert("Product added successfully");
+      navigate("/listProduct");
+    } catch (error) {
+      console.error(error);
+      alert("Error creating product. Please try again.");
+    }
+  };
+
+  return (
+    <div className="flex min-h-screen bg-gray-100">
+      <Sidebar />
+
+      <section className="flex flex-col flex-grow items-center justify-center px-6 py-12 bg-gray-50">
+        <div className="w-full max-w-4xl bg-white rounded-lg shadow-md p-8">
+          <h1 className="text-2xl font-bold text-gray-900 mb-8 text-center">Add Product</h1>
+
+          <form onSubmit={handleSubmit} className="space-y-6">
+
+            <div className="flex flex-col items-center gap-4 mb-6">
+              <p className="text-lg text-gray-300">Upload Image</p>
+              <input onChange={handleChange} type="file" name='image' id='image' accept='image/*' hidden />
+              <label htmlFor="image" className="cursor-pointer">
+                <img
+                  src={productData.image ? URL.createObjectURL(productData.image) : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZjNoW6ODGDcPspZCSV2U13ThQ8LrfVlNgCA&s"}
+                  alt="Uploaded preview or placeholder"
+                  className="w-48 h-48 object-cover rounded-xl shadow-lg transition-transform duration-300 hover:scale-105"
+                />
+              </label>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+              <div>
+                <label htmlFor="productName" className="block mb-2 text-sm font-medium text-gray-700">Product Name</label>
+                <input
+                  type="text"
+                  id="productName"
+                  name="productName"
+                  value={productData.productName || ''}
+                  onChange={handleChange}
+                  placeholder="Enter the product name"
+                  required
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="category" className="block mb-2 text-sm font-medium text-gray-700">Category</label>
+                <input
+                  type="text"
+                  id="category"
+                  name="category"
+                  value={productData.category || ''}
+                  onChange={handleChange}
+                  placeholder="Enter the category"
+                  required
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="productPrice" className="block mb-2 text-sm font-medium text-gray-700">Product Price</label>
+                <input
+                  type="number"
+                  id="productPrice"
+                  name="productPrice"
+                  value={productData.productPrice || ''}
+                  onChange={handleChange}
+                  placeholder="Enter the product price"
+                  required
+                  min="0"
+                  step="0.01"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="productTotalStockQuantity" className="block mb-2 text-sm font-medium text-gray-700">Stock Quantity</label>
+                <input
+                  type="number"
+                  id="productTotalStockQuantity"
+                  name="productTotalStockQuantity"
+                  value={productData.productTotalStockQuantity || ''}
+                  onChange={handleChange}
+                  placeholder="Enter the stock quantity"
+                  required
+                  min="0"
+                  step="1"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="totalRating" className="block mb-2 text-sm font-medium text-gray-700">Total Rating</label>
+                <input
+                  type="number"
+                  id="totalRating"
+                  name="totalRating"
+                  value={productData.totalRating || ''}
+                  onChange={handleChange}
+                  placeholder="Enter the total rating"
+                  required
+                  min="0"
+                  max="5"
+                  step="0.1"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600"
+                />
+              </div>
+
+            </div>
+
+            <div>
+              <label htmlFor="productDescription" className="block mb-2 text-sm font-medium text-gray-700">Description</label>
+              <textarea
+                id="productDescription"
+                name="productDescription"
+                value={productData.productDescription || ''}
+                onChange={handleChange}
+                placeholder="Enter the product description"
+                required
+                rows={4}
+                className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm resize-none focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600"
+              />
+            </div>
+
+            <button
+              type="submit"
+              className="w-full bg-indigo-600 text-white font-semibold py-3 rounded-md shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-300 transition"
+            >
+              Add Product
+            </button>
+          </form>
+        </div>
+      </section>
+    </div>
+  );
+};
+
+export default AddProduct;
