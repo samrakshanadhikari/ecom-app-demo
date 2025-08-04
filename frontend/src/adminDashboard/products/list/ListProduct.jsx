@@ -9,6 +9,7 @@ const ListProduct = () => {
     const fetchProducts = async () => {
         try {
             const response = await axios.get('http://localhost:3000/api/product/getAll');
+            console.log("response" ,response)
             setProducts(response.data.data);
         } catch (error) {
             console.error('Error fetching products:', error);
@@ -34,8 +35,6 @@ const ListProduct = () => {
             alert('Failed to delete product');
         }
     };
-
-
 
     return (
         <div className="flex min-h-screen bg-gray-100">

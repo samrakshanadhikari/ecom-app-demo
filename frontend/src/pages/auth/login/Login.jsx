@@ -47,7 +47,7 @@ const handleSubmit = async (e) => {
  
     if (role === "admin") {
       navigate("/dashboard");
-    } else {
+    } else  {
       navigate("/");
     }
 

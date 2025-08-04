@@ -27,6 +27,4 @@ APIAuthenticated.interceptors.request.use((config)=>{
 }, (error)=> Promise.reject(error)
 )
 
-//object, json
-
 export {API, APIAuthenticated}

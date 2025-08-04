@@ -11,6 +11,7 @@ import AddProduct from './adminDashboard/products/add/AddProduct';
 import ProtectedRoute from './routes/ProtectedRoute';
 import { jwtDecode } from 'jwt-decode';  
 import ListProduct from './adminDashboard/products/list/ListProduct'; 
+import FetchProduct from './pages/products/FetchProduct';
 
 function App() {
   const [role, setRole] = useState(null);
@@ -20,6 +21,8 @@ function App() {
     if (token) {
       try {
         const decoded = jwtDecode(token);
+
+        
         console.log("Decoded token:", decoded);
 
         console.log("Role : ", decoded.role)
@@ -30,6 +33,7 @@ function App() {
       }
     }
   }, []);
+  
 
   return (
     <BrowserRouter>
@@ -42,7 +46,9 @@ function App() {
 
         <Route path='/dashboard' element={<Dashboard />} />
         <Route path='/addProduct' element={<ProtectedRoute element={AddProduct} allowedRoles={['admin']} />} />
-         <Route path='/listProduct' element={<ListProduct />} />
+        <Route path='/listProduct' element={<ListProduct />} />
+        <Route path='/fetchProduct' element={<FetchProduct />} />
+        
       </Routes>
     </BrowserRouter>
   );
