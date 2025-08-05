@@ -1,9 +1,17 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
+import Navbar from '../../../globals/components/navbar/Navbar';
+import {useDispatch, useSelector} from "react-redux"
+import { register } from '../../../store/authSlice';
+import { STATUS } from '../../../globals/status/Status';
 
 const Register = () => {
   const navigate = useNavigate();
+  const dispatch=useDispatch();
+  const {status} =useSelector ((state)=>state.auth);
+
+  console.log("status : ", status)
 
   const [userData, setUserData] = useState({
     username: '',
@@ -21,14 +29,24 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await axios.post('http://localhost:3000/api/register', userData);
-    console.log('Response:', response.data);
-    alert('User registered successfully');
-    navigate('/login');
+    dispatch(register(userData));
   };
+
+
+  useEffect(()=>{
+    if(status ===STATUS.SUCCESS){
+      alert("Reister successfully")
+
+    }
+    
+  },[status, dispatch])
+  
 
   
   return (
+    <>
+  
+    <Navbar/>
     <section className="bg-white min-h-screen flex items-center justify-center px-6 py-8">
       <div className="flex flex-col items-center justify-center w-full max-w-md">
         <div className="w-full bg-white rounded-lg shadow-lg border border-gray-200 p-8">
@@ -98,6 +116,7 @@ const Register = () => {
         </div>
       </div>
     </section>
+    </>
   );
 };
 

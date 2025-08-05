@@ -3,6 +3,7 @@ import axios from 'axios';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import Sidebar from '../../dashboard/sidebar/Sidebar';
 import { FaRupeeSign, FaBoxOpen, FaStar, FaTags } from "react-icons/fa";
+import { Link } from 'react-router-dom';
 const ListProduct = () => {
     const [products, setProducts] = useState([]);
 
@@ -78,13 +79,12 @@ const ListProduct = () => {
                             </div>
 
                             <div className="flex gap-4 items-center text-xl">
-                                <button
+                                <Link to={`/editProduct/${product._id}`}
                                     title="Edit"
                                     className="text-blue-600 hover:text-blue-800"
-                                    onClick={() => alert("Edit logic here")}
                                 >
                                     <FaEdit />
-                                </button>
+                                </Link>
                                 <button
                                     title="Delete"
                                     className="text-red-600 hover:text-red-800"

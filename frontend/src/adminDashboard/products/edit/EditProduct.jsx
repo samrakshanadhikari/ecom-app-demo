@@ -1,34 +1,44 @@
 import React, { useState, useEffect } from 'react';
-import axios from "axios";
-import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { useParams, useNavigate } from 'react-router-dom';
 import Sidebar from '../../dashboard/sidebar/Sidebar';
 
-const AddProduct = () => {
+const EditProduct = () => {
+  const { id } = useParams();  
   const navigate = useNavigate();
 
   const [productData, setProductData] = useState({
-    productName: "",
-    productDescription: "",
-    productPrice: null,
-    productTotalStockQuantity: null,
-    totalRating: null,
-    image: null,
-    category: ""
+    productName: '',
+    productDescription: '',
+    productPrice: '',
+    productTotalStockQuantity: '',
+    totalRating: '',
+    image: null, 
+    category: '',
+    existingImageUrl: ''  
   });
 
-  const [categories, setCategories] = useState([]);
-
   useEffect(() => {
-    const fetchCategories = async () => {
+    const fetchProduct = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/category/");
-        setCategories(response.data.data || response.data); 
+        const response = await axios.get(`http://localhost:3000/api/product/singleProduct/${id}`);
+        const product = response.data.data; 
+        setProductData({
+          productName: product.productName,
+          productDescription: product.productDescription,
+          productPrice: product.productPrice,
+          productTotalStockQuantity: product.productTotalStockQuantity,
+          totalRating: product.totalRating,
+          image: null,
+          category: product.category,
+          existingImageUrl: product.productImageUrl, 
+        });
       } catch (error) {
-        console.error("Error fetching categories:", error);
+        console.error("Error fetching product:", error);
       }
     };
-    fetchCategories();
-  }, []);
+    fetchProduct();
+  }, [id]);
 
   const handleChange = (e) => {
     const { name, value, files, type } = e.target;
@@ -44,41 +54,51 @@ const AddProduct = () => {
     const token = localStorage.getItem('token');
     const formData = new FormData();
 
-    for (let key in productData) {
+    for (let key in productData) { 
+      if (key === 'image' && !productData.image) continue; 
       formData.append(key, productData[key]);
     }
 
     try {
-      const response = await axios.post("http://localhost:3000/api/product/create", formData, {
+      await axios.patch(`http://localhost:3000/api/product/update/${id}`, formData, {
         headers: {
           Authorization: `${token}`,
         }
       });
-      alert("Product added successfully");
-      navigate("/listProduct");
+      alert('Product updated successfully');
+      navigate('/listProduct');
     } catch (error) {
-      console.error(error);
-      alert("Error creating product. Please try again.");
+      console.error('Error updating product:', error);
+      alert('Failed to update product');
     }
   };
 
   return (
     <div className="flex min-h-screen bg-gray-100">
       <Sidebar />
-
       <section className="flex flex-col flex-grow items-center justify-center px-6 py-12 bg-gray-50">
         <div className="w-full max-w-4xl bg-white rounded-lg shadow-md p-8">
-          <h1 className="text-2xl font-bold text-gray-900 mb-8 text-center">Add Product</h1>
+          <h1 className="text-2xl font-bold text-gray-900 mb-8 text-center">Edit Product</h1>
 
           <form onSubmit={handleSubmit} className="space-y-6">
-
             <div className="flex flex-col items-center gap-4 mb-6">
-              <p className="text-lg text-gray-300">Upload Image</p>
-              <input onChange={handleChange} type="file" name='image' id='image' accept='image/*' hidden />
+              <p className="text-lg text-gray-300">Upload New Image (optional)</p>
+              <input
+                onChange={handleChange}
+                type="file"
+                name="image"
+                id="image"
+                accept="image/*"
+                hidden
+              />
               <label htmlFor="image" className="cursor-pointer">
                 <img
-                  src={productData.image ? URL.createObjectURL(productData.image) : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZjNoW6ODGDcPspZCSV2U13ThQ8LrfVlNgCA&s"}
-                  alt="Uploaded preview or placeholder"
+                  src={
+                    productData.image
+                      ? URL.createObjectURL(productData.image)
+                      : `http://localhost:3000/${productData.existingImageUrl}`
+                  }
+                  alt="Product preview"
                   className="w-48 h-48 object-cover rounded-xl shadow-lg transition-transform duration-300 hover:scale-105"
                 />
               </label>
@@ -92,7 +112,7 @@ const AddProduct = () => {
                   type="text"
                   id="productName"
                   name="productName"
-                  value={productData.productName || ''}
+                  value={productData.productName}
                   onChange={handleChange}
                   placeholder="Enter the product name"
                   required
@@ -102,21 +122,16 @@ const AddProduct = () => {
 
               <div>
                 <label htmlFor="category" className="block mb-2 text-sm font-medium text-gray-700">Category</label>
-                <select
+                <input
+                  type="text"
                   id="category"
                   name="category"
-                  value={productData.category || ''}
+                  value={productData.category}
                   onChange={handleChange}
+                  placeholder="Enter the category"
                   required
                   className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600"
-                >
-                  <option value="" disabled>Select a category</option>
-                  {categories.map((cat) => (
-                    <option key={cat._id || cat.id || cat.name} value={cat.name || cat.categoryName || cat}>
-                      {cat.name || cat.categoryName || cat}
-                    </option>
-                  ))}
-                </select>
+                />
               </div>
 
               <div>
@@ -125,7 +140,7 @@ const AddProduct = () => {
                   type="number"
                   id="productPrice"
                   name="productPrice"
-                  value={productData.productPrice || ''}
+                  value={productData.productPrice}
                   onChange={handleChange}
                   placeholder="Enter the product price"
                   required
@@ -141,7 +156,7 @@ const AddProduct = () => {
                   type="number"
                   id="productTotalStockQuantity"
                   name="productTotalStockQuantity"
-                  value={productData.productTotalStockQuantity || ''}
+                  value={productData.productTotalStockQuantity}
                   onChange={handleChange}
                   placeholder="Enter the stock quantity"
                   required
@@ -157,7 +172,7 @@ const AddProduct = () => {
                   type="number"
                   id="totalRating"
                   name="totalRating"
-                  value={productData.totalRating || ''}
+                  value={productData.totalRating}
                   onChange={handleChange}
                   placeholder="Enter the total rating"
                   required
@@ -175,7 +190,7 @@ const AddProduct = () => {
               <textarea
                 id="productDescription"
                 name="productDescription"
-                value={productData.productDescription || ''}
+                value={productData.productDescription}
                 onChange={handleChange}
                 placeholder="Enter the product description"
                 required
@@ -188,7 +203,7 @@ const AddProduct = () => {
               type="submit"
               className="w-full bg-indigo-600 text-white font-semibold py-3 rounded-md shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-300 transition"
             >
-              Add Product
+              Update Product
             </button>
           </form>
         </div>
@@ -197,4 +212,4 @@ const AddProduct = () => {
   );
 };
 
-export default AddProduct;
+export default EditProduct;

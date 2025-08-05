@@ -1,110 +1,103 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { FaShoppingCart, FaUser } from 'react-icons/fa';
 
 const Navbar = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
 
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const navigate = useNavigate();
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    setIsLoggedIn(!!token);
+  }, []);
 
-    useEffect(() => {
-        const token = localStorage.getItem("token");
-        setIsLoggedIn(!!token);
-    }, []);
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    setIsLoggedIn(false);
+    navigate('/login');
+  };
 
-    const handleLogout = () => {
-        localStorage.removeItem("token");
-        setIsLoggedIn(false);
-        navigate("/login");
-    };
+  return (
+    <header className="fixed top-0 left-0 right-0 z-50 bg-white shadow-md py-3">
+      <div className="max-w-screen-xl mx-auto px-4 flex items-center justify-between">
+        
+        {/* Logo & Brand */}
+        <Link to="/" className="flex items-center space-x-2">
+          <img
+            className="h-8 w-8 object-contain"
+            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsraf4VoY7hzsYfKLorCvZkzFfBuo2f40Jjw&s"
+            alt="Logo"
+          />
+          <span className="text-xl font-bold text-gray-800">Ecommerce</span>
+        </Link>
 
-    return (
-        <header className="fixed inset-x-0 top-0 z-30 mx-auto w-full max-w-screen-md border border-gray-100 bg-white/80 py-3 shadow backdrop-blur-lg md:top-6 md:rounded-3xl lg:max-w-screen-lg">
-            <div className="px-4">
-                <div className="flex items-center justify-between">
-                    <div className="flex shrink-0">
-                        <Link className="flex items-center" to="/">
-                            <img
-                                className="h-7 w-auto"
-                                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsraf4VoY7hzsYfKLorCvZkzFfBuo2f40Jjw&s"
-                                alt="ToDo App Logo"
-                            />
-                      
-                            <span className="ml-2 font-bold text-gray-800">Ecommerce</span>
-                        </Link>
-                    </div>
+        {/* Main Navigation */}
+        <nav className="hidden md:flex items-center gap-6">
+          <Link to="/" className="text-sm font-medium text-gray-700 hover:text-blue-600">
+            Home
+          </Link>
+          <Link to="/shop" className="text-sm font-medium text-gray-700 hover:text-blue-600">
+            Shop
+          </Link>
+          <Link to="/about" className="text-sm font-medium text-gray-700 hover:text-blue-600">
+            About
+          </Link>
+          <Link to="/help" className="text-sm font-medium text-gray-700 hover:text-blue-600">
+            Help & Support
+          </Link>
+        </nav>
 
-                    <div className="hidden md:flex md:items-center md:justify-center md:gap-5">
-                        <Link
-                            className="text-sm font-medium text-gray-800 hover:text-blue-600"
-                            to="/"
-                        >
-                            Home
-                        </Link>
-                        <Link
-                            className="text-sm font-medium text-gray-800 hover:text-blue-600"
-                            to="/help"
-                        >
-                           Help & Support
-                        </Link>
-                        <Link
-                            className="text-sm font-medium text-gray-800 hover:text-blue-600"
-                            to="/"
-                        >
-                           
-                        </Link>
-                        <Link
-                            className="text-sm font-medium text-gray-800 hover:text-blue-600"
-                            to="/about"
-                        >
-                            About
-                        </Link>
-                       
-                    </div>
+        {/* Right Controls: Cart, Auth */}
+        <div className="flex items-center gap-3">
+          {/* Cart Icon */}
+          <Link
+            to="/cart"
+            className="relative flex items-center text-gray-700 hover:text-blue-600"
+            title="Cart"
+          >
+            <FaShoppingCart size={20} />
+            <span className="absolute -top-2 -right-2 bg-blue-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
+              2
+            </span>
+          </Link>
 
-                    <div className="flex items-center justify-end gap-3">
-                        {!isLoggedIn ? (
-                            <>
-                              <Link
-                                    className="inline-flex items-center justify-center rounded-xl  px-3 py-2 text-sm font-semibold text-black shadow-sm transition-all duration-150 hover:bg-blue-500"
-                                    to="/cart"
-                                >
-                                    Cart
-                                </Link>
-                                <Link
-                                    className="hidden sm:inline-flex items-center justify-center rounded-xl bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 transition-all duration-150 hover:bg-gray-50"
-                                    to="/register"
-                                >
-                                    Register
-                                </Link>
-                                <Link
-                                    className="inline-flex items-center justify-center rounded-xl bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm transition-all duration-150 hover:bg-blue-500"
-                                    to="/login"
-                                >
-                                    Login
-                                </Link>
-                              
-                            </>
-                        ) : (
-                            <>
-                                <Link
-                                    className="hidden sm:inline-flex items-center justify-center rounded-xl bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 transition-all duration-150 hover:bg-gray-50"
-                                    to="/profile"
-                                >
-                                    Profile
-                                </Link>
-                                <button
-                                    onClick={handleLogout}
-                                    className="inline-flex items-center justify-center rounded-xl bg-red-500 px-3 py-2 text-sm font-semibold text-white shadow-sm transition-all duration-150 hover:bg-red-600"
-                                >
-                                    Logout
-                                </button>
-                            </>
-                        )}
-                    </div>
-                </div>
-            </div>
-        </header>
-    );
+          {/* Auth Controls */}
+          {!isLoggedIn ? (
+            <>
+              <Link
+                to="/register"
+                className="hidden sm:inline-block text-sm text-gray-800 border border-gray-300 rounded-lg px-3 py-1.5 hover:bg-gray-100"
+              >
+                Register
+              </Link>
+              <Link
+                to="/login"
+                className="inline-block text-sm text-white bg-blue-600 rounded-lg px-3 py-1.5 hover:bg-blue-700"
+              >
+                Login
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link
+                to="/profile"
+                className="hidden sm:inline-flex items-center justify-center text-gray-700 hover:text-blue-600 text-xl"
+                title="Profile"
+              >
+                <FaUser />
+              </Link>
+              <button
+                onClick={handleLogout}
+                className="text-sm text-white bg-red-500 rounded-lg px-3 py-1.5 hover:bg-red-600"
+              >
+                Logout
+              </button>
+            </>
+          )}
+        </div>
+      </div>
+    </header>
+  );
 };
 
 export default Navbar;
