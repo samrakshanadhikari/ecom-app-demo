@@ -3,9 +3,13 @@ import axios from "axios"
 import { Link, useNavigate } from 'react-router-dom'
 import { jwtDecode } from 'jwt-decode';
 import Navbar from '../../../globals/components/navbar/Navbar';
+import { login } from '../../../store/authSlice';
+import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
 
 const Login = () => {
   const navigate = useNavigate();
+  const dispatch=useDispatch();
 
   const [userData, setUserData] = useState({
     email: "",
@@ -20,44 +24,24 @@ const Login = () => {
     })
   }
 
-
   const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    try {
-      const response = await axios.post("http://localhost:3000/api/login", userData);
-      const token = response.data.token;
-      localStorage.setItem('role', response.data.data.role);
-      console.log("Response", response)
-
-      if (!token) {
-        alert("No token received. Login failed.");
-        return;
-      }
-
-      localStorage.setItem("token", token);
-
-      const decoded = jwtDecode(token);
-      console.log("Decoded token:", decoded);
-
-      const role = decoded.role;
-      console.log("Login role:", role);
-
-      alert("User logged in successfully");
-
-
-      if (role === "admin") {
-        navigate("/dashboard");
-      } else {
-        navigate("/");
-      }
-
-    } catch (error) {
-      console.error("Login error:", error.response?.data || error.message);
-      alert("Login failed. Please check your credentials.");
+  e.preventDefault();
+  const user = await dispatch(login(userData));
+  if (user) {
+    toast.success("Login successful");
+    console.log("User role", user.role);
+    
+    if (user.role === "admin") {
+      navigate("/dashboard");
+    } else if (user.role === "superAdmin") {
+      navigate("/superAdminDashboard");
+    } else {
+      navigate("/");
     }
-  };
-
+  } else {
+    toast.error("Login failed. Please check your credentials.");
+  }
+};
 
   return (
     <>
@@ -142,7 +126,7 @@ const Login = () => {
               >
                 Login
               </button>
-              <p className="text-sm font-light text-gray-600">
+              <p className="text-sm font-light text-gray-600 ml-12">
                 Don’t have an account?{' '}
                 <Link
                   to="/register"

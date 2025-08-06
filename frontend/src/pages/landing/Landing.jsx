@@ -2,6 +2,7 @@ import React from "react";
 import LandingImage from "../../assets/landing.jpeg"; // Make sure this path is correct
 import Navbar from "../../globals/components/navbar/Navbar";
 import FetchProduct from "../products/FetchProduct";
+import Footer from "../../globals/components/footer/Footer";
 
 const LandingPage = () => {
   return (
@@ -43,6 +44,7 @@ const LandingPage = () => {
         </div>
       </div>
       <FetchProduct/>
+ 
     </>
   );
 };

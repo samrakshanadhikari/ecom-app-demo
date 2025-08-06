@@ -1,26 +1,32 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaShoppingCart, FaUser } from 'react-icons/fa';
+import { useSelector } from 'react-redux';
 
 const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
+  const { cart } = useSelector((state) => state.cart);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
     setIsLoggedIn(!!token);
   }, []);
-
+  
   const handleLogout = () => {
     localStorage.removeItem('token');
     setIsLoggedIn(false);
     navigate('/login');
   };
 
+  const store=cart?.data?.length;
+  console.log("cart", store)
+
+
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white shadow-md py-3">
       <div className="max-w-screen-xl mx-auto px-4 flex items-center justify-between">
-        
+
         {/* Logo & Brand */}
         <Link to="/" className="flex items-center space-x-2">
           <img
@@ -56,9 +62,11 @@ const Navbar = () => {
             title="Cart"
           >
             <FaShoppingCart size={20} />
-            <span className="absolute -top-2 -right-2 bg-blue-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
-              2
-            </span>
+            {cart?.data?.length > 0 && (
+              <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center shadow-md">
+                {cart?.data?.length}
+              </span>
+            )}
           </Link>
 
           {/* Auth Controls */}

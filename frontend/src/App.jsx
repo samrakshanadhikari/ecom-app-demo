@@ -18,6 +18,9 @@ import 'react-toastify/dist/ReactToastify.css';
 import EditProduct from './adminDashboard/products/edit/EditProduct';
 import store from './store/store';
 import { Provider } from 'react-redux';
+import Footer from './globals/components/footer/Footer';
+import Checkout from './pages/checkout/Checkout';
+import SingleProduct from './pages/products/SingleProduct';
 
 function App() {
   const [role, setRole] = useState(null);
@@ -55,10 +58,13 @@ function App() {
           <Route path='/addProduct' element={<ProtectedRoute element={AddProduct} allowedRoles={['admin']} />} />
           <Route path='/listProduct' element={<ListProduct />} />
           <Route path='/fetchProduct' element={<FetchProduct />} />
+          <Route path='/singleProduct/:id' element={<SingleProduct />} />
           <Route path='/editProduct/:id' element={<EditProduct />} />
           <Route path='/cart' element={<Cart />} />
+          <Route path='/checkout' element={<Checkout />} />
 
         </Routes>
+             {/* <Footer/> */}
       </BrowserRouter>
 
 

@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { FaStar, FaRegStar } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 
 const FetchProduct = () => {
   const [products, setProducts] = useState([]);
@@ -70,14 +71,14 @@ const FetchProduct = () => {
               </div>
 
 
-              <div className="mt-3 flex items-center justify-center gap-1">
+              <div className="mt-3 flex items-center justify-center gap-1 mb-5">
                 {renderStars(pro.totalRating)}
 
               </div>
 
-              <button className="mt-5 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm transition-colors">
+              <Link to={`/singleProduct/${pro._id} `} className=" px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm transition-colors">
                 Add to Cart
-              </button>
+              </Link>
             </div>
           </div>
         ))}
