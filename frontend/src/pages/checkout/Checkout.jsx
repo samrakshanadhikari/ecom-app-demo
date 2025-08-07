@@ -1,9 +1,29 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Footer from '../../globals/components/footer/Footer';
 import Navbar from '../../globals/components/navbar/Navbar';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchCartItem } from '../../store/cartSlice';
 
 const Checkout = () => {
   const [paymentMethod, setPaymentMethod] = useState('COD');
+  const { cart, status } = useSelector((state) => state.cart);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchCartItem());
+  }, [])
+
+  console.log("cart : ", cart)
+
+
+
+  const totalItem= cart?.data?.length
+  const totalQuantity= cart?.data?.reduce((prev, curr)=>prev + curr.quantity, 0 ) ;
+  const subTotal= cart?.data?.reduce((prev, curr)=>prev + curr?.quantity * curr?.productId?.productPrice, 0 ) ;
+  const discount= subTotal * 0.05;
+  const total=subTotal-discount;
+
+
 
   return (
     <>
@@ -18,23 +38,27 @@ const Checkout = () => {
               <p className="text-gray-500">Review your order before placing it.</p>
 
               <div className="mt-5 space-y-4">
-                <div className="flex items-center bg-gray-50 border border-gray-200 p-4 rounded-lg">
-                  <img
-                    src="/placeholder.jpg"
-                    alt="Book Title"
-                    className="w-20 h-20 object-cover rounded-lg"
-                  />
-                  <div className="ml-4 flex-1">
-                    <h3 className="text-lg font-bold">Sample Book Title</h3>
-                    <p className="text-sm text-gray-500">By Author Name</p>
-                    <p className="text-sm text-gray-500">Category</p>
-                    <p className="text-xs text-gray-400">Published: 2025</p>
-                    <p className="mt-2 text-sm">Quantity: <span className="font-semibold">2</span></p>
-                    <p className="text-md font-semibold text-gray-700">
-                      Rs. 500.00
-                    </p>
-                  </div>
-                </div>
+                {
+                  cart?.data?.map((item) => (
+                    <div key={item._id} className="flex items-center bg-gray-50 border border-gray-200 p-4 rounded-lg">
+                      <img
+                        src={`http://localhost:3000/${item?.productId?.productImageUrl}`}
+                        alt="Book Title"
+                        className="w-20 h-20 object-cover rounded-lg"
+                      />
+                      <div className="ml-4 flex-1">
+                        <h3 className="text-lg font-bold">{item?.productId?.productName}</h3>
+                        <p className="text-sm text-gray-500">{item?.productId?.productDescription}</p>
+                        <p className="text-sm text-gray-500">{item?.productId?.category}</p>
+                        <p className="text-xs text-gray-400">{item?.productId?.productTotalStockQuantity}</p>
+                        <p className="mt-2 text-sm">Quantity: <span className="font-semibold">{item?.quantity}</span></p>
+                        <p className="text-md font-semibold text-gray-700">
+                          Rs. {item?.productId?.productPrice}
+                        </p>
+                      </div>
+                    </div>
+                  ))
+                }
               </div>
             </div>
 
@@ -45,9 +69,8 @@ const Checkout = () => {
               <div className="mt-3 space-y-3">
                 {/* COD Option */}
                 <label
-                  className={`flex items-center space-x-2 bg-gray-100 border p-4 rounded-lg cursor-pointer ${
-                    paymentMethod === 'COD' ? 'border-blue-500' : 'border-gray-300'
-                  }`}
+                  className={`flex items-center space-x-2 bg-gray-100 border p-4 rounded-lg cursor-pointer ${paymentMethod === 'COD' ? 'border-blue-500' : 'border-gray-300'
+                    }`}
                 >
                   <input
                     type="radio"
@@ -66,9 +89,8 @@ const Checkout = () => {
 
                 {/* Khalti Option */}
                 <label
-                  className={`flex items-center space-x-2 bg-gray-100 border p-4 rounded-lg cursor-pointer ${
-                    paymentMethod === 'KHALTI' ? 'border-blue-500' : 'border-gray-300'
-                  }`}
+                  className={`flex items-center space-x-2 bg-gray-100 border p-4 rounded-lg cursor-pointer ${paymentMethod === 'KHALTI' ? 'border-blue-500' : 'border-gray-300'
+                    }`}
                 >
                   <input
                     type="radio"
@@ -104,23 +126,23 @@ const Checkout = () => {
               <div className="mt-6 border-t pt-4">
                 <div className="flex justify-between">
                   <p className="text-gray-700">Total Items</p>
-                  <p className="text-gray-700">1</p>
+                  <p className="text-gray-700">{totalItem}</p>
                 </div>
                 <div className="flex justify-between">
                   <p className="text-gray-700">Total Quantity</p>
-                  <p className="text-gray-700">2</p>
+                  <p className="text-gray-700">{totalQuantity}</p>
                 </div>
                 <div className="flex justify-between">
                   <p className="text-gray-700">Subtotal</p>
-                  <p className="text-gray-700">Rs. 1000.00</p>
+                  <p className="text-gray-700">Rs. {subTotal}</p>
                 </div>
                 <div className="flex justify-between">
                   <p className="text-gray-700">Discount</p>
-                  <p className="text-gray-700">- Rs. 50.00 (5%)</p>
+                  <p className="text-gray-700">{discount}(5%)</p>
                 </div>
                 <div className="flex justify-between font-semibold">
                   <p className="text-lg">Total</p>
-                  <p className="text-lg">Rs. 950.00</p>
+                  <p className="text-lg">Rs. {total. toFixed}</p>
                 </div>
               </div>
 
