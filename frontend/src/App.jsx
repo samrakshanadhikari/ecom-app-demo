@@ -24,6 +24,13 @@ import SingleProduct from './pages/products/SingleProduct';
 import Success from './pages/orders/Success';
 import Userlist from './adminDashboard/user/Userlist';
 import OrderList from './adminDashboard/order/OrderList';
+import AddCategory from './adminDashboard/category/AddCategory';
+import CategoryList from './adminDashboard/category/CategoryList';
+import Category from './pages/category/Category';
+import ProductByCategory from './pages/category/ProductByCategory';
+import MyOrder from './pages/orders/MyOrder';
+import OrderDetails from './pages/orders/OrderDetails';
+import Review from './pages/review/Review';
 
 function App() {
   const [role, setRole] = useState(null);
@@ -48,7 +55,7 @@ function App() {
 
   return (
     <Provider store={store}>
-       <BrowserRouter>
+      <BrowserRouter>
         {/* {role !== "admin" && <Navbar />} */}
         <ToastContainer position="top-right" autoClose={3000} />
         <Routes>
@@ -66,21 +73,27 @@ function App() {
           <Route path='/cart' element={<Cart />} />
           <Route path='/checkout' element={<Checkout />} />
           <Route path='/success' element={<Success />} />
-
+          <Route path='/myOrder' element={<MyOrder />} />
+          <Route path='/orderDetails/:id' element={<OrderDetails />} />
+           <Route path='/review' element={<Review />} />
 
           {/* Admin part */}
           <Route path='/userList' element={<Userlist />} />
           <Route path='/orderList' element={<OrderList />} />
 
+          <Route path='/addCategory' element={<ProtectedRoute element={AddCategory} allowedRoles={['admin']} />} />
+          <Route path='/categoryList' element={<CategoryList />} />
+          <Route path='/category' element={<Category />} />
+          <Route path='/productByCategory/:categoryName' element={<ProductByCategory />} />
 
         </Routes>
-             {/* <Footer/> */}
+        <Footer/>
       </BrowserRouter>
 
 
     </Provider>
 
-     
+
 
   );
 }

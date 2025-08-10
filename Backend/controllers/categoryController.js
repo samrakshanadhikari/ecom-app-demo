@@ -1,17 +1,31 @@
 import Category from "../models/categoryModel.js";
 
-
-//creat product api
+// Create category API with image upload
 export const createCategory = async (req, res) => {
-    const userId=req.user.id;
-    const { categoryName} = req.body;
+    const userId = req.user.id;
+    const { categoryName } = req.body;
+
+    let categoryImageUrl;
+    if (req.file) {
+        categoryImageUrl = req.file.filename;  
+    }
+
+    console.log(categoryImageUrl)
+    const existingCategory = await Category.findOne({ categoryName });
+    if (existingCategory) {
+        return res.status(400).json({ message: "Category name must be unique" });
+    }
 
     const category = await Category.create({
         categoryName,
+        categoryImageUrl, 
         userId
-    })
-    res.status(200).json({ message: "Category created successfully", data: category })
-}
+    });
+
+    res.status(200).json({ message: "Category created successfully", data: category });
+};
+
+
 
 //fetch all category
 export const getAllCategory = async (req, res) => {

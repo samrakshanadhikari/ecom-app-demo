@@ -1,18 +1,34 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ListAllUser } from "../../store/authSlice";
 import Sidebar from "../dashboard/sidebar/Sidebar";
-import { FaPen, FaTrash } from "react-icons/fa";  // Pencil and Trash icons
+import { FaPen, FaTrash } from "react-icons/fa";
+import Pagination from "../pagination/Pagination";
+
+
+const PAGE_SIZE = 15;
 
 const Userlist = () => {
   const dispatch = useDispatch();
   const { userList } = useSelector((state) => state.auth);
 
+  const [currentPage, setCurrentPage] = useState(1);
+
   useEffect(() => {
     dispatch(ListAllUser());
   }, [dispatch]);
 
-  console.log("userlist ", userList);
+  const totalUsers = userList?.data?.length || 0;
+  const totalPages = Math.ceil(totalUsers / PAGE_SIZE);
+
+  const paginatedUsers = userList?.data?.slice(
+    (currentPage - 1) * PAGE_SIZE,
+    currentPage * PAGE_SIZE
+  ) || [];
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
 
   return (
     <div className="flex min-h-screen bg-gray-100">
@@ -31,14 +47,14 @@ const Userlist = () => {
               </tr>
             </thead>
             <tbody>
-              {userList?.data?.length > 0 ? (
-                userList.data.map((user, index) => (
+              {paginatedUsers.length > 0 ? (
+                paginatedUsers.map((user, index) => (
                   <tr
                     key={user.id}
                     className="border-b hover:bg-gray-100 transition"
                   >
-                    <td className="px-6 py-3">{index + 1}</td>
-                    <td className="px-6 py-3">{user.name}</td>
+                    <td className="px-6 py-3">{(currentPage - 1) * PAGE_SIZE + index + 1}</td>
+                    <td className="px-6 py-3">{user.username}</td>
                     <td className="px-6 py-3">{user.email}</td>
                     <td className="px-6 py-3 capitalize">{user.role}</td>
                     <td className="px-6 py-3 text-right space-x-4">
@@ -59,10 +75,7 @@ const Userlist = () => {
                 ))
               ) : (
                 <tr>
-                  <td
-                    colSpan="5"
-                    className="px-6 py-3 text-center text-gray-500"
-                  >
+                  <td colSpan="5" className="px-6 py-3 text-center text-gray-500">
                     No users found
                   </td>
                 </tr>
@@ -70,6 +83,12 @@ const Userlist = () => {
             </tbody>
           </table>
         </div>
+
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
       </div>
     </div>
   );

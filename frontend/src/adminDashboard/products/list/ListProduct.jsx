@@ -1,25 +1,43 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { FaEdit, FaTrash } from 'react-icons/fa';
+import { FaEdit, FaTrash, FaRupeeSign, FaBoxOpen, FaStar, FaTags } from 'react-icons/fa';
 import Sidebar from '../../dashboard/sidebar/Sidebar';
-import { FaRupeeSign, FaBoxOpen, FaStar, FaTags } from "react-icons/fa";
 import { Link } from 'react-router-dom';
+import Pagination from '../../pagination/Pagination';
+
+const PAGE_SIZE = 4;
+
 const ListProduct = () => {
     const [products, setProducts] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1); // for pagination
 
     const fetchProducts = async () => {
         try {
             const response = await axios.get('http://localhost:3000/api/product/getAll');
-            console.log("response" ,response)
             setProducts(response.data.data);
         } catch (error) {
             console.error('Error fetching products:', error);
         }
-    }; 
+    };
 
     useEffect(() => {
         fetchProducts();
     }, []);
+
+    // Pagination logic
+    const totalProducts = products.length;
+    const totalPages = Math.ceil(totalProducts / PAGE_SIZE);
+
+    // Slice the products for the current page
+    const paginatedProducts = products.slice(
+      (currentPage - 1) * PAGE_SIZE,
+      currentPage * PAGE_SIZE
+    );
+
+    const handlePageChange = (page) => {
+        if(page < 1 || page > totalPages) return;
+        setCurrentPage(page);
+    };
 
     const handleDelete = async (id) => {
         try {
@@ -31,6 +49,7 @@ const ListProduct = () => {
             });
             alert('Product deleted successfully');
             fetchProducts(); 
+           
         } catch (error) {
             console.error('Delete error:', error);
             alert('Failed to delete product');
@@ -45,7 +64,7 @@ const ListProduct = () => {
                 <h1 className="text-2xl font-bold text-center mb-6"> All Products</h1>
 
                 <div className="space-y-4">
-                    {products.map((product) => (
+                    {paginatedProducts.map((product) => (
                         <div
                             key={product._id}
                             className="bg-white rounded-lg shadow-md p-4 flex flex-col md:flex-row items-center md:items-start justify-between gap-4"
@@ -96,6 +115,13 @@ const ListProduct = () => {
                         </div>
                     ))}
                 </div>
+
+                {/* Pagination component */}
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={handlePageChange}
+                />
             </div>
         </div>
     );

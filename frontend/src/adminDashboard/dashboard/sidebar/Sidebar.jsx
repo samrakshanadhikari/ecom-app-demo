@@ -43,7 +43,7 @@ const Sidebar = () => {
         
        
         <SidebarLink to="/addCategory" icon={<FiPlusCircle />} label="Add Category" />
-        <SidebarLink to="/listCategory" icon={<FiLayers />} label="All Categories" />
+        <SidebarLink to="/categoryList" icon={<FiLayers />} label="All Categories" />
 
 
         <SidebarLink to="/addBanner" icon={<FiPlusCircle />} label="Add Banner" />

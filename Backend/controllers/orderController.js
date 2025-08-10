@@ -121,25 +121,38 @@ export const getAllOrders = async (req, res) => {
 
 //get single order
 export const getSingleOrder = async (req, res) => {
-    // const {id}=req.params;
-    const orders = await Order.findById(req.params.id);
-    if (!orders) {
-        return res.status(404).json({ message: "Order cannot be null" });
-    }
-    res.status(200).json({ message: "Successfully get the single order", data: orders })
-}
+  try {
+    const order = await Order.findById(req.params.id).populate({
+      path: "products.productId",
+      select: "productName productImageUrl", 
+    });
 
+    if (!order) {
+      return res.status(404).json({ message: "Order cannot be null" });
+    }
+
+    res.status(200).json({ message: "Successfully get the single order", data: order });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
 
 //get my orders
-export const getMyOrder = async (req, res) => {
-    const userId = req.user.id;
-    const orders = await Order.find({ userId });
-    if (orders.length === 0) {
-        return res.status(404).json({ message: "Order cannot be null" });
-    }
-    res.status(200).json({ message: "Successfully get  my orders", data: orders })
-}
 
+export const getMyOrder = async (req, res) => {
+  const userId = req.user.id;
+
+  const orders = await Order.find({ userId }).populate({
+    path: 'products.productId',
+    select: 'productName productImageUrl'
+  });
+
+  if (orders.length === 0) {
+    return res.status(404).json({ message: "Order cannot be null" });
+  }
+
+  res.status(200).json({ message: "Successfully get my orders", data: orders });
+};
 
 //admin update orderstatus
 export const updateOrderStatus = async (req, res) => {

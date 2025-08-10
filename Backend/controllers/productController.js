@@ -73,3 +73,20 @@ export const deleteProduct= async(req, res)=>{
     res.status(200).json({ message: "Product deleted successfully"})
 
 }
+
+export const getProductsByCategory = async (req, res) => {
+  const { category } = req.params;
+
+  if (!category) {
+    return res.status(400).json({ message: "Category is required" });
+  }
+
+  // Use case-insensitive regex to match category
+  const products = await Product.find({ category: { $regex: new RegExp(`^${category}$`, "i") } });
+
+  if (products.length === 0) {
+    return res.status(404).json({ message: `No products found for category: ${category}` });
+  }
+
+  res.status(200).json({ message: "Products fetched successfully", data: products });
+};

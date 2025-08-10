@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   FaBoxOpen,
   FaUsers,
@@ -15,6 +15,10 @@ import {
   CartesianGrid,
 } from "recharts";
 import Sidebar from "./sidebar/Sidebar";
+import { useDispatch, useSelector } from "react-redux";
+import { ListAllUser } from "../../store/authSlice";
+import { listAllProduct } from "../../store/productSlice";
+import { fetchAllOrders } from "../../store/orderSlice";
 
 const revenueData = [
   { month: "Jan", revenue: 2000 },
@@ -26,6 +30,37 @@ const revenueData = [
 ];
 
 const AdminDashboard = () => {
+
+
+  const dispatch = useDispatch();
+  const { userList } = useSelector((state) => state.auth)
+  const { product } = useSelector((state) => state.product)
+  const { allOrders } = useSelector((state) => state.order);
+
+  useEffect(() => {
+    dispatch(ListAllUser());
+    dispatch(listAllProduct());
+    dispatch(fetchAllOrders());
+
+  }, [])
+
+
+
+
+  const totalUser = userList?.data?.length;
+  const totalProduct = product?.length;
+  const totalOrder = allOrders?.data?.length;
+
+  //for order section
+const deliveredOrders = allOrders?.data?.filter(order => order.orderStatus === "delivered") || [];
+const pendingOrders = allOrders?.data?.filter(order => order.orderStatus === "pending") || [];
+const cancelledOrders = allOrders?.data?.filter(order => order.orderStatus === "cancelled") || [];
+
+
+  console.log("deliveresorder ", deliveredOrders)
+
+
+
   return (
     <div className="flex min-h-screen bg-gray-100">
       <Sidebar />
@@ -38,15 +73,15 @@ const AdminDashboard = () => {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-          <Card icon={<FaUsers className="text-3xl text-blue-600" />} title="Users" value="120" />
-          <Card icon={<FaShoppingCart className="text-3xl text-green-600" />} title="Orders" value="85" />
+          <Card icon={<FaUsers className="text-3xl text-blue-600" />} title="Users" value={totalUser} />
+          <Card icon={<FaShoppingCart className="text-3xl text-green-600" />} title="Orders" value={totalOrder} />
           <Card icon={<FaDollarSign className="text-3xl text-yellow-600" />} title="Revenue" value="$4,500" />
-          <Card icon={<FaBoxOpen className="text-3xl text-purple-600" />} title="Products" value="65" />
+          <Card icon={<FaBoxOpen className="text-3xl text-purple-600" />} title="Products" value={totalProduct} />
         </div>
 
         <div className="bg-white p-6 rounded-2xl shadow-lg mb-10">
           <h2 className="text-xl font-semibold text-gray-700 mb-4">
-             Monthly Revenue Overview
+            Monthly Revenue Overview
           </h2>
           <ResponsiveContainer width="100%" height={300}>
             <LineChart data={revenueData}>
@@ -68,19 +103,19 @@ const AdminDashboard = () => {
 
           <div className="bg-green-50 border border-green-200 p-6 rounded-2xl shadow-sm">
             <h2 className="text-lg font-semibold text-green-800 mb-2">Delivered Orders</h2>
-            <p className="text-4xl font-bold text-green-700">12</p>
+            <p className="text-4xl font-bold text-green-700">{deliveredOrders?.length}</p>
             <p className="text-sm text-green-600 mt-1">Orders delivered successfully</p>
           </div>
 
           <div className="bg-yellow-50 border border-yellow-200 p-6 rounded-2xl shadow-sm">
             <h2 className="text-lg font-semibold text-yellow-800 mb-2">Pending Orders</h2>
-            <p className="text-4xl font-bold text-yellow-700">7</p>
+            <p className="text-4xl font-bold text-yellow-700">{pendingOrders?.length}</p>
             <p className="text-sm text-yellow-600 mt-1">Waiting for confirmation or in process</p>
           </div>
 
           <div className="bg-red-50 border border-red-200 p-6 rounded-2xl shadow-sm">
             <h2 className="text-lg font-semibold text-red-800 mb-2">Cancelled Orders</h2>
-            <p className="text-4xl font-bold text-red-700">9</p>
+            <p className="text-4xl font-bold text-red-700">{cancelledOrders?.length}</p>
             <p className="text-sm text-red-600 mt-1">Orders cancelled or failed</p>
           </div>
         </div>

@@ -9,6 +9,7 @@ const orderSlice = createSlice({
     items: [],
     singleOrder: [],
     allOrders: [],
+    myOrder:[],
     status: STATUS.LOADING,
   },
   reducers: {
@@ -20,6 +21,9 @@ const orderSlice = createSlice({
     },
     setAllOrders(state, action) {
       state.allOrders = action.payload;
+    },
+    setMyOrders(state, action) {
+      state.myOrder = action.payload;
     },
     setStatus(state, action) {
       state.status = action.payload;
@@ -35,7 +39,7 @@ export const {
   setSingleOrder,
   setAllOrders,
   setStatus,
-  resetStatus,
+  resetStatus,setMyOrders
 } = orderSlice.actions;
 
 export default orderSlice.reducer;
@@ -84,6 +88,23 @@ export function fetchAllOrders() {
     }
   };
 }
+// Fetch my orders
+export function fetchMyOrders() {
+  return async function fetchMyOrdersThunk(dispatch) {
+    dispatch(setStatus(STATUS.LOADING));
+    try {
+      const response = await APIAuthenticated.get(`/api/order/myOrders`);
+      if (response.status === 200) {
+        dispatch(setStatus(STATUS.SUCCESS));
+        dispatch(setMyOrders(response.data.data));
+      } else {
+        dispatch(setStatus(STATUS.ERROR));
+      }
+    } catch (err) {
+      dispatch(setStatus(STATUS.ERROR));
+    }
+  };
+}
 
 // Fetch single order
 export function fetchSingleOrder(orderId) {
@@ -93,7 +114,7 @@ export function fetchSingleOrder(orderId) {
       const response = await APIAuthenticated.get(`/api/order/${orderId}`);
       if (response.status === 200) {
         dispatch(setStatus(STATUS.SUCCESS));
-        dispatch(setSingleOrder(response.data));
+        dispatch(setSingleOrder(response.data.data));
       } else {
         dispatch(setStatus(STATUS.ERROR));
       }

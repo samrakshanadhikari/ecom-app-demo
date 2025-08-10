@@ -1,18 +1,33 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllOrders } from "../../store/orderSlice";
 import Sidebar from "../dashboard/sidebar/Sidebar";
 import { FaPen, FaTrash } from "react-icons/fa";
+import Pagination from "../pagination/Pagination";
+
+const PAGE_SIZE = 15;
 
 const OrderList = () => {
   const dispatch = useDispatch();
-  const { allOrders, status } = useSelector((state) => state.order);
+  const { allOrders } = useSelector((state) => state.order);
+
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     dispatch(fetchAllOrders());
   }, [dispatch]);
 
-  console.log("allOrtders : ", allOrders)
+  const totalOrders = allOrders?.data?.length || 0;
+  const totalPages = Math.ceil(totalOrders / PAGE_SIZE);
+
+  const paginatedOrders = allOrders?.data?.slice(
+    (currentPage - 1) * PAGE_SIZE,
+    currentPage * PAGE_SIZE
+  ) || [];
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
 
   return (
     <div className="flex min-h-screen bg-gray-100">
@@ -21,7 +36,7 @@ const OrderList = () => {
         <h1 className="text-3xl font-bold mb-6 text-gray-800">All Orders</h1>
 
         <div className="bg-white shadow-md rounded-lg overflow-hidden">
-          {allOrders?.data?.length > 0 ? (
+          {paginatedOrders.length > 0 ? (
             <table className="min-w-full">
               <thead className="bg-blue-600 text-white">
                 <tr>
@@ -34,12 +49,12 @@ const OrderList = () => {
                 </tr>
               </thead>
               <tbody>
-                {allOrders.data.map((order, index) => (
+                {paginatedOrders.map((order, index) => (
                   <tr
                     key={order._id}
                     className="border-b hover:bg-gray-100 transition"
                   >
-                    <td className="px-6 py-3">{index + 1}</td>
+                    <td className="px-6 py-3">{(currentPage - 1) * PAGE_SIZE + index + 1}</td>
                     <td className="px-6 py-3 font-mono">{order._id}</td>
                     <td className="px-6 py-3">{order.userId?.username || "N/A"}</td>
                     <td className="px-6 py-3 capitalize">{order.orderStatus || "N/A"}</td>
@@ -72,6 +87,12 @@ const OrderList = () => {
             </div>
           )}
         </div>
+
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
       </div>
     </div>
   );

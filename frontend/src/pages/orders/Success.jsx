@@ -16,7 +16,7 @@ const Success = () => {
 
         <div className="mt-6 space-y-3">
           <Link
-            to="/orders"
+            to="/myOrder"
             className="w-full inline-block px-6 py-3 rounded-lg bg-green-500 hover:bg-green-600 text-white font-medium"
           >
             View My Orders

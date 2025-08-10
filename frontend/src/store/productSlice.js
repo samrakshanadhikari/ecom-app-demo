@@ -7,6 +7,7 @@ const productSlice = createSlice({
     initialState: {
         product: [],
         singleProduct: null,
+        productByCategory:[],
         status: STATUS.LOADING,
         searchProduct:[],
     },
@@ -16,6 +17,9 @@ const productSlice = createSlice({
         },
         setSingleProduct(state, action) {
             state.singleProduct = action.payload;
+        },
+        setproductByCategory(state, action) {
+            state.productByCategory = action.payload;
         },
         setSearchProduct(state, action) {
             state.searchProduct = action.payload;
@@ -43,7 +47,7 @@ const productSlice = createSlice({
 
 export const {
     setProductData,
-    setSingleProduct,
+    setSingleProduct, setproductByCategory,
     setStatus,
     setDeleteProduct,
     setUpdateProduct,
@@ -52,7 +56,7 @@ export const {
 
 export default productSlice.reducer;
 
-// Add Book
+// Add product
 export function addProduct(productData) {
     return async function addProductThunk(dispatch) {
         dispatch(setStatus(STATUS.LOADING));
@@ -73,7 +77,7 @@ export function addProduct(productData) {
 
 // List All product
 export function listAllProduct() {
-    return async function listAllBookThunk(dispatch) {
+    return async function listAllProductThunk(dispatch) {
         dispatch(setStatus(STATUS.LOADING));
         try {
             const response = await API.get("/api/product/getAll");
@@ -90,7 +94,8 @@ export function listAllProduct() {
     };
 }
 
-// Get Single Book
+
+// Get Single product
 export function listSingleProduct(productId) {
     return async function listSingleProductThunk(dispatch) {
         dispatch(setStatus(STATUS.LOADING));
@@ -108,8 +113,26 @@ export function listSingleProduct(productId) {
         }
     };
 }
+// Get product by category
+export function listProductByCategory(categoryName) {
+    return async function listProductByCategoryThunk(dispatch) {
+        dispatch(setStatus(STATUS.LOADING));
+        try {
+            const response = await API.get(`/api/product/category/${categoryName}`);
+            if (response.status === 200) {
+                dispatch(setproductByCategory(response.data.data));  
+                dispatch(setStatus(STATUS.SUCCESS));
+            } else {
+                dispatch(setStatus(STATUS.ERROR));
+            }
+        } catch (err) {
+            console.error(err);
+            dispatch(setStatus(STATUS.ERROR));
+        }
+    };
+}
 
-// Delete Book
+// Delete product
 export function deleteProduct(productId) {
     return async function deleteProductThunk(dispatch) {
         dispatch(setStatus(STATUS.LOADING));
@@ -128,7 +151,7 @@ export function deleteProduct(productId) {
     };
 }
 
-// Update Book
+// Update product
 export function updateProduct({ id, productData }) {
     return async function updateProductThunk(dispatch) {
         dispatch(setStatus(STATUS.LOADING));
