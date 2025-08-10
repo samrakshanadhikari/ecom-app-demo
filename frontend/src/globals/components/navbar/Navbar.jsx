@@ -1,12 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaShoppingCart, FaUser } from 'react-icons/fa';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchCartItem } from '../../../store/cartSlice';
 
 const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
+  const dispatch=useDispatch();
   const { cart } = useSelector((state) => state.cart);
+
+    // useEffect(() => {
+    //   dispatch(fetchCartItem ())
+    // }, [dispatch])
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -20,7 +26,8 @@ const Navbar = () => {
   };
 
   const store=cart?.data?.length;
-  console.log("cart", store)
+  console.log("cart in the navbar", store)
+
 
 
   return (

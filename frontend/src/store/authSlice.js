@@ -150,7 +150,7 @@ export function ListAllUser() {
   return async function ListAllUserThunk(dispatch) {
     dispatch(setStatus(STATUS.LOADING));
     try {
-      const response = await APIAuthenticated.get("/api/getAllUsers");
+      const response = await APIAuthenticated.get("/api/getAll");
       if (response.status === 200) {
         dispatch(setUserList(response.data));
         dispatch(setStatus(STATUS.SUCCESS));

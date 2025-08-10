@@ -21,6 +21,9 @@ import { Provider } from 'react-redux';
 import Footer from './globals/components/footer/Footer';
 import Checkout from './pages/checkout/Checkout';
 import SingleProduct from './pages/products/SingleProduct';
+import Success from './pages/orders/Success';
+import Userlist from './adminDashboard/user/Userlist';
+import OrderList from './adminDashboard/order/OrderList';
 
 function App() {
   const [role, setRole] = useState(null);
@@ -62,6 +65,13 @@ function App() {
           <Route path='/editProduct/:id' element={<EditProduct />} />
           <Route path='/cart' element={<Cart />} />
           <Route path='/checkout' element={<Checkout />} />
+          <Route path='/success' element={<Success />} />
+
+
+          {/* Admin part */}
+          <Route path='/userList' element={<Userlist />} />
+          <Route path='/orderList' element={<OrderList />} />
+
 
         </Routes>
              {/* <Footer/> */}

@@ -32,7 +32,7 @@ const cartSlice = createSlice({
 }
 });
 
-export const {setCartData, setStatus, setUpdateQuantity} = cartSlice.actions;
+export const {setCartData, setStatus, setUpdateQuantity, setDeleteItemFromCart} = cartSlice.actions;
 export default cartSlice.reducer;
 
 
@@ -45,7 +45,7 @@ export function addToCart(productId, quantity=1) {
       const response = await APIAuthenticated.post("/api/cart", {productId, quantity});
       if (response.status === 200) {
         dispatch(setStatus(STATUS.SUCCESS));
-        dispatch(fetchCartData());
+        dispatch(fetchCartItem());
 
       } else {
         dispatch(setStatus(STATUS.ERROR));
