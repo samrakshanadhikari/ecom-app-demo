@@ -45,12 +45,7 @@ const Sidebar = () => {
         <SidebarLink to="/addCategory" icon={<FiPlusCircle />} label="Add Category" />
         <SidebarLink to="/categoryList" icon={<FiLayers />} label="All Categories" />
 
-
-        <SidebarLink to="/addBanner" icon={<FiPlusCircle />} label="Add Banner" />
-        <SidebarLink to="/listBanner" icon={<FiImage />} label="All Banners" />
-
         <SidebarLink to="/settings" icon={<FiSettings />} label="Settings" />
-        <SidebarLink to="/reports" icon={<FiBarChart />} label="Reports" />
 
 
         <div onClick={handleLogout} className="flex items-center px-4 py-3 rounded-lg hover:bg-red-50 text-red-600 transition duration-150 mt-4 cursor-pointer">
