@@ -34,9 +34,8 @@ const FetchProduct = () => {
     <div className="bg-gradient-to-b from-gray-50 to-white py-16 px-4">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-extrabold mb-3 text-gray-800 relative inline-block">
-            Featured Products
-            <span className="absolute bottom-0 left-0 w-full h-1 bg-blue-500 transform -translate-y-2"></span>
+          <h1 className="text-4xl font-extrabold mb-3 text-gray-800">
+            Products
           </h1>
           <p className="text-gray-600 max-w-2xl mx-auto">
             Discover our handpicked selection of premium products at competitive prices
@@ -79,10 +78,7 @@ const FetchProduct = () => {
                   <div className="flex items-center gap-1.5">
                     {renderStars(pro.totalRating || 4)}
                   </div>
-                  <div className="flex flex-col items-end">
-                    <span className="text-gray-500 text-xs line-through">
-                      Rs {pro.originalPrice || pro.productPrice + 500} 
-                    </span>
+                  <div>
                     <span className="text-blue-600 font-bold text-lg">
                       Rs {pro.productPrice}
                     </span>
