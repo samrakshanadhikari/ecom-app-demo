@@ -31,31 +31,26 @@ const Navbar = () => {
 
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-white shadow-md py-4">
-      <div className="max-w-screen-xl mx-auto px-4 flex items-center justify-between">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-gray-50 to-gray-100 shadow-md py-4">
+      <div className="max-w-screen-xl mx-auto px-6 flex items-center justify-between">
 
         {/* Logo & Brand */}
-        <Link to="/" className="flex items-center space-x-2">
-          <img
-            className="h-9 w-9 object-contain"
-            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsraf4VoY7hzsYfKLorCvZkzFfBuo2f40Jjw&s"
-            alt="Logo"
-          />
-          <span className="text-xl font-bold text-gray-800">Ecommerce</span>
+        <Link to="/" className="flex items-center">
+          <span className="text-xl font-bold text-gray-800 border-b-2 border-blue-500 pb-1">ShopSmart</span>
         </Link>
 
         {/* Main Navigation */}
-        <nav className="hidden md:flex items-center gap-8">
-          <Link to="/" className="text-sm font-medium text-gray-700 hover:text-green-600 transition-colors">
+        <nav className="hidden md:flex items-center gap-6">
+          <Link to="/" className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors border-b-2 border-transparent hover:border-blue-500 py-1">
             Home
           </Link>
-          <Link to="/shop" className="text-sm font-medium text-gray-700 hover:text-green-600 transition-colors">
+          <Link to="/shop" className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors border-b-2 border-transparent hover:border-blue-500 py-1">
             Shop
           </Link>
-          <Link to="/category" className="text-sm font-medium text-gray-700 hover:text-green-600 transition-colors">
+          <Link to="/category" className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors border-b-2 border-transparent hover:border-blue-500 py-1">
             Categories
           </Link>
-          <Link to="/myOrder" className="text-sm font-medium text-gray-700 hover:text-green-600 transition-colors">
+          <Link to="/myOrder" className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors border-b-2 border-transparent hover:border-blue-500 py-1">
             My Orders
           </Link>
         </nav>
@@ -65,12 +60,12 @@ const Navbar = () => {
           {/* Cart Icon */}
           <Link
             to="/cart"
-            className="relative flex items-center text-gray-700 hover:text-green-600 transition-colors"
+            className="relative flex items-center text-gray-700 hover:text-blue-600 hover:bg-blue-100 p-2 rounded-full transition-colors"
             title="Cart"
           >
             <FaShoppingCart size={22} />
             {cart?.data?.length > 0 && (
-              <span className="absolute -top-2 -right-2 bg-green-600 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center shadow-md">
+              <span className="absolute -top-2 -right-2 bg-blue-600 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center shadow-md">
                 {cart?.data?.length}
               </span>
             )}
@@ -87,7 +82,7 @@ const Navbar = () => {
               </Link>
               <Link
                 to="/login"
-                className="inline-block text-sm text-white bg-green-600 rounded-lg px-4 py-2 hover:bg-green-700 transition-colors"
+                className="inline-block text-sm text-white bg-blue-600 rounded-lg px-4 py-2 hover:bg-blue-700 transition-colors"
               >
                 Login
               </Link>
@@ -96,14 +91,14 @@ const Navbar = () => {
             <>
               <Link
                 to="/profile"
-                className="hidden sm:inline-flex items-center justify-center text-gray-700 hover:text-green-600 text-xl transition-colors"
+                className="hidden sm:inline-flex items-center justify-center text-gray-700 hover:text-blue-600 text-xl transition-colors"
                 title="Profile"
               >
                 <FaUser />
               </Link>
               <button
                 onClick={handleLogout}
-                className="text-sm text-white bg-red-500 rounded-lg px-4 py-2 hover:bg-red-600 transition-colors"
+                className="text-sm text-white bg-blue-600 rounded-lg px-4 py-2 hover:bg-blue-700 transition-colors"
               >
                 Logout
               </button>
