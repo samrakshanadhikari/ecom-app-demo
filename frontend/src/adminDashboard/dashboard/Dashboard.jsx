@@ -5,29 +5,11 @@ import {
   FaShoppingCart,
   FaDollarSign,
 } from "react-icons/fa";
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer,
-  CartesianGrid,
-} from "recharts";
 import Sidebar from "./sidebar/Sidebar";
 import { useDispatch, useSelector } from "react-redux";
 import { ListAllUser } from "../../store/authSlice";
 import { listAllProduct } from "../../store/productSlice";
 import { fetchAllOrders } from "../../store/orderSlice";
-
-const revenueData = [
-  { month: "Jan", revenue: 2000 },
-  { month: "Feb", revenue: 3000 },
-  { month: "Mar", revenue: 4000 },
-  { month: "Apr", revenue: 3500 },
-  { month: "May", revenue: 5000 },
-  { month: "Jun", revenue: 4200 },
-];
 
 const AdminDashboard = () => {
 
@@ -68,7 +50,6 @@ const cancelledOrders = allOrders?.data?.filter(order => order.orderStatus === "
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8">
           <div>
             <h1 className="text-3xl font-bold text-gray-800"> Admin Dashboard</h1>
-            <p className="text-gray-500 mt-1">Welcome back, Admin!</p>
           </div>
         </div>
 
@@ -77,26 +58,6 @@ const cancelledOrders = allOrders?.data?.filter(order => order.orderStatus === "
           <Card icon={<FaShoppingCart className="text-3xl text-green-600" />} title="Orders" value={totalOrder} />
           <Card icon={<FaDollarSign className="text-3xl text-yellow-600" />} title="Revenue" value="$4,500" />
           <Card icon={<FaBoxOpen className="text-3xl text-purple-600" />} title="Products" value={totalProduct} />
-        </div>
-
-        <div className="bg-white p-6 rounded-2xl shadow-lg mb-10">
-          <h2 className="text-xl font-semibold text-gray-700 mb-4">
-            Monthly Revenue Overview
-          </h2>
-          <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={revenueData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="month" />
-              <YAxis />
-              <Tooltip />
-              <Line
-                type="monotone"
-                dataKey="revenue"
-                stroke="#4f46e5"
-                strokeWidth={3}
-              />
-            </LineChart>
-          </ResponsiveContainer>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
