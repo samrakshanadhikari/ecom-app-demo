@@ -31,13 +31,13 @@ const Navbar = () => {
 
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-white shadow-md py-3">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-white shadow-md py-4">
       <div className="max-w-screen-xl mx-auto px-4 flex items-center justify-between">
 
         {/* Logo & Brand */}
         <Link to="/" className="flex items-center space-x-2">
           <img
-            className="h-8 w-8 object-contain"
+            className="h-9 w-9 object-contain"
             src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsraf4VoY7hzsYfKLorCvZkzFfBuo2f40Jjw&s"
             alt="Logo"
           />
@@ -45,32 +45,32 @@ const Navbar = () => {
         </Link>
 
         {/* Main Navigation */}
-        <nav className="hidden md:flex items-center gap-6">
-          <Link to="/" className="text-sm font-medium text-gray-700 hover:text-blue-600">
+        <nav className="hidden md:flex items-center gap-8">
+          <Link to="/" className="text-sm font-medium text-gray-700 hover:text-green-600 transition-colors">
             Home
           </Link>
-          <Link to="/shop" className="text-sm font-medium text-gray-700 hover:text-blue-600">
+          <Link to="/shop" className="text-sm font-medium text-gray-700 hover:text-green-600 transition-colors">
             Shop
           </Link>
-          <Link to="/about" className="text-sm font-medium text-gray-700 hover:text-blue-600">
-            About
+          <Link to="/category" className="text-sm font-medium text-gray-700 hover:text-green-600 transition-colors">
+            Categories
           </Link>
-          <Link to="/help" className="text-sm font-medium text-gray-700 hover:text-blue-600">
-            Help & Support
+          <Link to="/myOrder" className="text-sm font-medium text-gray-700 hover:text-green-600 transition-colors">
+            My Orders
           </Link>
         </nav>
 
         {/* Right Controls: Cart, Auth */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-4">
           {/* Cart Icon */}
           <Link
             to="/cart"
-            className="relative flex items-center text-gray-700 hover:text-blue-600"
+            className="relative flex items-center text-gray-700 hover:text-green-600 transition-colors"
             title="Cart"
           >
-            <FaShoppingCart size={20} />
+            <FaShoppingCart size={22} />
             {cart?.data?.length > 0 && (
-              <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center shadow-md">
+              <span className="absolute -top-2 -right-2 bg-green-600 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center shadow-md">
                 {cart?.data?.length}
               </span>
             )}
@@ -81,13 +81,13 @@ const Navbar = () => {
             <>
               <Link
                 to="/register"
-                className="hidden sm:inline-block text-sm text-gray-800 border border-gray-300 rounded-lg px-3 py-1.5 hover:bg-gray-100"
+                className="hidden sm:inline-block text-sm text-gray-800 border border-gray-300 rounded-lg px-4 py-2 hover:bg-gray-100 transition-colors"
               >
                 Register
               </Link>
               <Link
                 to="/login"
-                className="inline-block text-sm text-white bg-blue-600 rounded-lg px-3 py-1.5 hover:bg-blue-700"
+                className="inline-block text-sm text-white bg-green-600 rounded-lg px-4 py-2 hover:bg-green-700 transition-colors"
               >
                 Login
               </Link>
@@ -96,14 +96,14 @@ const Navbar = () => {
             <>
               <Link
                 to="/profile"
-                className="hidden sm:inline-flex items-center justify-center text-gray-700 hover:text-blue-600 text-xl"
+                className="hidden sm:inline-flex items-center justify-center text-gray-700 hover:text-green-600 text-xl transition-colors"
                 title="Profile"
               >
                 <FaUser />
               </Link>
               <button
                 onClick={handleLogout}
-                className="text-sm text-white bg-red-500 rounded-lg px-3 py-1.5 hover:bg-red-600"
+                className="text-sm text-white bg-red-500 rounded-lg px-4 py-2 hover:bg-red-600 transition-colors"
               >
                 Logout
               </button>

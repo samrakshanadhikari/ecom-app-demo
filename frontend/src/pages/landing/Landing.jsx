@@ -9,7 +9,7 @@ const LandingPage = () => {
   return (
     <>
       <Navbar />
-      <div className=" flex items-center justify-center bg-white px-6 pt-24">
+      <div className="bg-gradient-to-b from-white to-gray-50 flex items-center justify-center px-6 pt-24 pb-16">
         <div className="max-w-7xl w-full grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
 
           {/* Text Section */}
@@ -23,28 +23,40 @@ const LandingPage = () => {
               Start shopping now and experience seamless service.
             </p>
 
-            <button className="bg-green-500 text-white px-6 py-3 rounded-md text-lg hover:bg-green-600 transition duration-200">
+            <a href="#categories" className="inline-block bg-green-600 text-white px-6 py-3 rounded-lg text-lg font-medium hover:bg-green-700 transition duration-200 shadow-md">
               Shop Now
-            </button>
+            </a>
 
-            <p className="text-sm text-gray-400 mt-4">
-              Fast delivery. Easy returns. Trusted by thousands of happy customers.
-            </p>
+            <div className="flex items-center mt-8 space-x-6">
+              <div className="flex items-center">
+                <svg className="h-5 w-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+                <span className="text-gray-600">Free Delivery</span>
+              </div>
+              <div className="flex items-center">
+                <svg className="h-5 w-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+                <span className="text-gray-600">Secure Payment</span>
+              </div>
+            </div>
           </div>
 
           {/* Image Section */}
           <div className="w-full flex justify-center p-4">
             <img
               src={LandingImage}
-              alt="Free Delivery"
-              className="w-96 h-96 rounded-full shadow-lg object-cover"
+              alt="Shopping"
+              className="w-full max-w-lg h-auto rounded-2xl shadow-2xl object-cover"
             />
           </div>
 
-
         </div>
       </div>
-      <Category/>
+      <div id="categories">
+        <Category/>
+      </div>
       <FetchProduct/>
  
     </>
