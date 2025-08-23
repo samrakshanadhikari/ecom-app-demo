@@ -57,42 +57,40 @@ const ListProduct = () => {
     };
 
     return (
-        <div className="flex min-h-screen bg-gray-100">
+        <div className="flex min-h-screen bg-blue-50">
             <Sidebar />
 
-            <div className="flex-1 p-6">
-                <h1 className="text-2xl font-bold text-center mb-6"> All Products</h1>
+            <div className="flex-1 p-6 bg-blue-50">
+                <h1 className="text-2xl font-bold text-blue-800 text-center mb-6"> All Products</h1>
 
                 <div className="space-y-4">
                     {paginatedProducts.map((product) => (
                         <div
                             key={product._id}
-                            className="bg-white rounded-lg shadow-md p-4 flex flex-col md:flex-row items-center md:items-start justify-between gap-4"
+                            className="bg-blue-100 rounded-lg shadow-md p-4 flex flex-col md:flex-row items-center md:items-start justify-between gap-4 border border-blue-200"
                         >
                             {/* Image */}
-                            <img
+                                <img
                                 src={`http://localhost:3000/${product.productImageUrl}`}
                                 alt={product.productName}
-                                className="w-full md:w-40 h-36 object-cover rounded-md"
-                            />
-
-                            <div className="flex-1 flex flex-col gap-1 text-center md:text-left">
-                                <h2 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
+                                className="w-full md:w-40 h-36 object-cover rounded-md bg-white p-1"
+                            />                            <div className="flex-1 flex flex-col gap-1 text-center md:text-left">
+                                <h2 className="text-lg font-semibold text-blue-800 flex items-center gap-2">
                                     {product.productName}
                                 </h2>
                                 <p className="text-sm text-gray-600 line-clamp-2">{product.productDescription}</p>
-                                <div className="text-sm text-gray-500 space-y-1 mt-1">
+                                <div className="text-sm text-blue-500 space-y-1 mt-1">
                                     <p className="flex items-center gap-2">
-                                        <FaRupeeSign className="text-gray-400" /> Rs. {product.productPrice}
+                                        <FaRupeeSign className="text-blue-400" /> Rs. {product.productPrice}
                                     </p>
                                     <p className="flex items-center gap-2">
-                                        <FaBoxOpen className="text-gray-400" /> {product.productTotalStockQuantity} in stock
+                                        <FaBoxOpen className="text-blue-400" /> {product.productTotalStockQuantity} in stock
                                     </p>
                                     <p className="flex items-center gap-2">
                                         <FaStar className="text-yellow-500" /> {product.totalRating} / 5
                                     </p>
                                     <p className="flex items-center gap-2">
-                                        <FaTags className="text-gray-400" /> {product.category}
+                                        <FaTags className="text-blue-400" /> {product.category}
                                     </p>
                                 </div>
                             </div>

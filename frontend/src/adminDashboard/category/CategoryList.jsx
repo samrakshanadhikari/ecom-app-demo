@@ -51,11 +51,11 @@ const CategoryList = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
+    <div className="flex min-h-screen bg-blue-50">
       <Sidebar />
-      <div className="flex-1 p-8 bg-gray-50 min-h-screen w-full">
+      <div className="flex-1 p-8 bg-blue-50 min-h-screen w-full">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold text-gray-800">Categories</h1>
+          <h1 className="text-2xl font-bold text-blue-800">Categories</h1>
           <button 
             onClick={() => navigate('/addCategory')}
             className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-sm"
@@ -66,14 +66,14 @@ const CategoryList = () => {
         
         {/* Stats card */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+          <div className="bg-blue-100 p-6 rounded-lg shadow-sm border border-blue-200">
             <div className="flex items-center">
-              <div className="p-3 rounded-full bg-blue-100 text-blue-600 mr-4">
+              <div className="p-3 rounded-full bg-blue-200 text-blue-600 mr-4">
                 <FaTags size={24} />
               </div>
               <div>
-                <p className="text-gray-500 text-sm">Total Categories</p>
-                <h3 className="text-2xl font-bold text-gray-800">{totalCategories}</h3>
+                <p className="text-blue-500 text-sm">Total Categories</p>
+                <h3 className="text-2xl font-bold text-blue-800">{totalCategories}</h3>
               </div>
             </div>
           </div>
@@ -83,35 +83,35 @@ const CategoryList = () => {
         <div className="mb-6">
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <FaSearch className="h-5 w-5 text-gray-400" />
+              <FaSearch className="h-5 w-5 text-blue-400" />
             </div>
             <input
               type="text"
               placeholder="Search categories..."
-              className="pl-10 w-full sm:w-64 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 shadow-sm"
+              className="pl-10 w-full sm:w-64 pr-4 py-2 border border-blue-200 rounded-lg focus:ring-blue-500 focus:border-blue-500 shadow-sm"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
         </div>
         
-        <div className="bg-white shadow-sm rounded-lg overflow-hidden border border-gray-200">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
+        <div className="bg-blue-100 shadow-sm rounded-lg overflow-hidden border border-blue-200">
+          <table className="min-w-full divide-y divide-blue-200">
+            <thead className="bg-blue-200">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">#</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-blue-700 uppercase tracking-wider">#</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-blue-700 uppercase tracking-wider">Category</th>
+                <th className="px-6 py-3 text-right text-xs font-medium text-blue-700 uppercase tracking-wider">Actions</th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className="bg-blue-50 divide-y divide-blue-200">
               {paginatedCategories.length > 0 ? (
                 paginatedCategories.map((category, index) => (
                   <tr
                     key={category._id}
-                    className="hover:bg-gray-50 transition-colors"
+                    className="hover:bg-blue-50 transition-colors"
                   >
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-500">
                       {(currentPage - 1) * PAGE_SIZE + index + 1}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
@@ -123,17 +123,17 @@ const CategoryList = () => {
                             className="w-10 h-10 object-cover rounded-md shadow-sm"
                           />
                         ) : (
-                          <div className="w-10 h-10 bg-gray-200 rounded-md flex items-center justify-center">
-                            <FaTags className="text-gray-400" />
+                          <div className="w-10 h-10 bg-blue-100 rounded-md flex items-center justify-center">
+                            <FaTags className="text-blue-400" />
                           </div>
                         )}
-                        <span className="ml-4 text-sm font-medium text-gray-900">{category.categoryName}</span>
+                        <span className="ml-4 text-sm font-medium text-blue-800">{category.categoryName}</span>
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <button
                         aria-label="Edit category"
-                        className="inline-flex items-center px-3 py-1 bg-indigo-50 text-indigo-600 rounded-md hover:bg-indigo-100 mr-2 transition-colors"
+                        className="inline-flex items-center px-3 py-1 bg-blue-50 text-blue-600 rounded-md hover:bg-blue-100 mr-2 transition-colors"
                         onClick={() => handleEdit(category)}
                       >
                         <FaPen size={14} className="mr-1" /> Edit
@@ -150,7 +150,7 @@ const CategoryList = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="3" className="px-6 py-4 text-center text-sm text-gray-500 border-b">
+                  <td colSpan="3" className="px-6 py-4 text-center text-sm text-blue-500 border-b border-blue-100">
                     {searchTerm ? "No categories found matching your search." : "No categories found."}
                   </td>
                 </tr>

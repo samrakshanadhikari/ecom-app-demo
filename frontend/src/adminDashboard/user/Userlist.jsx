@@ -55,9 +55,9 @@ const Userlist = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
+    <div className="flex min-h-screen bg-blue-50">
       <Sidebar />
-      <div className="flex-1 p-8 bg-gray-50 min-h-screen w-full">
+      <div className="flex-1 p-8 bg-blue-50 min-h-screen w-full">
         {/* Header Section with Search */}
         <div className="mb-8">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between">
@@ -87,7 +87,7 @@ const Userlist = () => {
             </div>
           </div>
           
-          <div className="mt-4 bg-white p-4 rounded-lg shadow-sm">
+          <div className="mt-4 bg-blue-100 p-4 rounded-lg shadow-sm border border-blue-200">
             <div className="flex flex-wrap gap-4">
               <div className="flex items-center">
                 <div className="w-3 h-3 rounded-full bg-green-500 mr-2"></div>
@@ -106,18 +106,18 @@ const Userlist = () => {
         </div>
         
         {/* User Table */}
-        <div className="bg-white shadow-md rounded-lg overflow-hidden border border-gray-200">
+        <div className="bg-blue-100 shadow-md rounded-lg overflow-hidden border border-blue-200">
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
+            <table className="min-w-full divide-y divide-blue-200">
+              <thead className="bg-blue-200">
                 <tr>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                  <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-blue-700 uppercase tracking-wider">User</th>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-blue-700 uppercase tracking-wider">Email</th>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-blue-700 uppercase tracking-wider">Status</th>
+                  <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-blue-700 uppercase tracking-wider">Actions</th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className="bg-blue-50 divide-y divide-blue-200">
                 {paginatedUsers.length > 0 ? (
                   paginatedUsers.map((user, index) => (
                     <tr

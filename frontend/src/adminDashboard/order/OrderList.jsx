@@ -89,9 +89,9 @@ const OrderList = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
+    <div className="flex min-h-screen bg-blue-50">
       <Sidebar />
-      <div className="flex-1 p-8 bg-gray-50 min-h-screen w-full">
+      <div className="flex-1 p-8 bg-blue-50 min-h-screen w-full">
         {/* Header Section with Search and Filters */}
         <div className="mb-8">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between">
@@ -133,64 +133,64 @@ const OrderList = () => {
           
           {/* Order Stats Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
-            <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex items-center">
-              <div className="rounded-full p-3 bg-blue-100 text-blue-600 mr-4">
+            <div className="bg-blue-100 p-4 rounded-lg shadow-sm border border-blue-200 flex items-center">
+              <div className="rounded-full p-3 bg-white text-blue-600 mr-4">
                 <FaShoppingBag size={20} />
               </div>
               <div>
-                <p className="text-gray-500 text-sm">Total Orders</p>
-                <p className="text-xl font-semibold text-gray-800">{totalOrders}</p>
+                <p className="text-blue-600 text-sm">Total Orders</p>
+                <p className="text-xl font-semibold text-blue-800">{totalOrders}</p>
               </div>
             </div>
             
-            <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex items-center">
-              <div className="rounded-full p-3 bg-yellow-100 text-yellow-600 mr-4">
+            <div className="bg-blue-100 p-4 rounded-lg shadow-sm border border-blue-200 flex items-center">
+              <div className="rounded-full p-3 bg-white text-yellow-600 mr-4">
                 <MdPendingActions size={20} />
               </div>
               <div>
-                <p className="text-gray-500 text-sm">Pending</p>
-                <p className="text-xl font-semibold text-gray-800">{pendingOrders}</p>
+                <p className="text-blue-600 text-sm">Pending</p>
+                <p className="text-xl font-semibold text-blue-800">{pendingOrders}</p>
               </div>
             </div>
             
-            <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex items-center">
-              <div className="rounded-full p-3 bg-green-100 text-green-600 mr-4">
+            <div className="bg-blue-100 p-4 rounded-lg shadow-sm border border-blue-200 flex items-center">
+              <div className="rounded-full p-3 bg-white text-green-600 mr-4">
                 <MdCheckCircle size={20} />
               </div>
               <div>
-                <p className="text-gray-500 text-sm">Delivered</p>
-                <p className="text-xl font-semibold text-gray-800">{deliveredOrders}</p>
+                <p className="text-blue-600 text-sm">Delivered</p>
+                <p className="text-xl font-semibold text-blue-800">{deliveredOrders}</p>
               </div>
             </div>
             
-            <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex items-center">
-              <div className="rounded-full p-3 bg-red-100 text-red-600 mr-4">
+            <div className="bg-blue-100 p-4 rounded-lg shadow-sm border border-blue-200 flex items-center">
+              <div className="rounded-full p-3 bg-white text-red-600 mr-4">
                 <MdCancel size={20} />
               </div>
               <div>
-                <p className="text-gray-500 text-sm">Cancelled</p>
-                <p className="text-xl font-semibold text-gray-800">{cancelledOrders}</p>
+                <p className="text-blue-600 text-sm">Cancelled</p>
+                <p className="text-xl font-semibold text-blue-800">{cancelledOrders}</p>
               </div>
             </div>
           </div>
         </div>
 
         {/* Orders Table */}
-        <div className="bg-white shadow-md rounded-lg overflow-hidden border border-gray-200">
+        <div className="bg-blue-100 shadow-md rounded-lg overflow-hidden border border-blue-200">
           <div className="overflow-x-auto">
             {paginatedOrders.length > 0 ? (
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
+              <table className="min-w-full divide-y divide-blue-200">
+                <thead className="bg-blue-200">
                   <tr>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order Details</th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                    <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-blue-700 uppercase tracking-wider">Order Details</th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-blue-700 uppercase tracking-wider">Customer</th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-blue-700 uppercase tracking-wider">Amount</th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-blue-700 uppercase tracking-wider">Status</th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-blue-700 uppercase tracking-wider">Date</th>
+                    <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-blue-700 uppercase tracking-wider">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody className="bg-blue-50 divide-y divide-blue-200">
                   {paginatedOrders.map((order) => (
                     <tr key={order._id} className="hover:bg-gray-50 transition">
                       <td className="px-6 py-4">

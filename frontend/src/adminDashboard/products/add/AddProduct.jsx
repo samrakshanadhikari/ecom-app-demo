@@ -90,7 +90,7 @@ const AddProduct = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
+    <div className="flex min-h-screen bg-blue-50">
       <Sidebar />
 
       <div className="flex-1 p-8">
@@ -99,17 +99,17 @@ const AddProduct = () => {
           <p className="text-gray-600 mt-1">Create a new product to your inventory</p>
         </div>
 
-        <div className="bg-white rounded-xl shadow-md overflow-hidden">
-          <div className="p-6 border-b border-gray-200">
-            <h2 className="text-lg font-semibold text-gray-800">Product Information</h2>
-            <p className="text-sm text-gray-500">Fill in the details for your new product</p>
+        <div className="bg-blue-100 rounded-xl shadow-md overflow-hidden border border-blue-200">
+          <div className="p-6 border-b border-blue-200">
+            <h2 className="text-lg font-semibold text-blue-800">Product Information</h2>
+            <p className="text-sm text-blue-600">Fill in the details for your new product</p>
           </div>
 
           <form onSubmit={handleSubmit} className="p-6">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               {/* Left Column - Image Upload */}
               <div className="lg:col-span-1">
-                <div className="flex flex-col items-center bg-gray-50 rounded-lg p-6 border-2 border-dashed border-gray-300">
+                <div className="flex flex-col items-center bg-white rounded-lg p-6 border-2 border-dashed border-blue-300">
                   <div className="mb-4 text-center">
                     <FaImage className="mx-auto h-12 w-12 text-gray-400" />
                     <h3 className="mt-2 text-sm font-medium text-gray-900">Product Image</h3>

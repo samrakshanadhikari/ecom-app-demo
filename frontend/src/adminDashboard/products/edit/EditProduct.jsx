@@ -74,11 +74,11 @@ const EditProduct = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
+    <div className="flex min-h-screen bg-blue-50">
       <Sidebar />
-      <section className="flex flex-col flex-grow items-center justify-center px-6 py-12 bg-gray-50">
-        <div className="w-full max-w-4xl bg-white rounded-lg shadow-md p-8">
-          <h1 className="text-2xl font-bold text-gray-900 mb-8 text-center">Edit Product</h1>
+      <section className="flex flex-col flex-grow items-center justify-center px-6 py-12 bg-blue-50">
+        <div className="w-full max-w-4xl bg-blue-100 rounded-lg shadow-md p-8 border border-blue-200">
+          <h1 className="text-2xl font-bold text-blue-800 mb-8 text-center">Edit Product</h1>
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="flex flex-col items-center gap-4 mb-6">
