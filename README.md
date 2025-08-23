@@ -1,2 +1,3 @@
-# Project2
-# Project2
+# backend - npm start
+# frontend - npm run dev
+
