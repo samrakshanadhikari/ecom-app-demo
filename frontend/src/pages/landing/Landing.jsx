@@ -1,5 +1,4 @@
 import React from "react";
-import LandingImage from "../../assets/landing.jpeg"; 
 import Navbar from "../../globals/components/navbar/Navbar";
 import FetchProduct from "../products/FetchProduct";
 import Footer from "../../globals/components/footer/Footer";
@@ -75,11 +74,19 @@ const LandingPage = () => {
 
           {/* Image Section */}
           <div className="w-full flex justify-center p-4">
-            <img
-              src={LandingImage}
-              alt="Shopping Experience"
-              className="w-full max-w-lg h-auto rounded-2xl shadow-lg object-cover transform hover:scale-105 transition-transform duration-700"
-            />
+            <div className="relative overflow-hidden rounded-2xl shadow-lg">
+              <img
+                src="http://localhost:3000/1754813703505-electronics.jpeg"
+                alt="Electronics Shopping"
+                className="w-full max-w-lg h-auto object-cover transform hover:scale-105 transition-transform duration-700"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-blue-900/40 to-transparent"></div>
+              <div className="absolute bottom-0 left-0 p-6">
+                <span className="px-3 py-1 bg-blue-600 text-white text-xs font-bold rounded-full uppercase tracking-wider">
+                  Featured
+                </span>
+              </div>
+            </div>
           </div>
 
         </div>
