@@ -31,20 +31,23 @@ const FetchProduct = () => {
   };
 
   return (
-    <div className="bg-gray-50 min-h-screen py-16 px-4">
+    <div className="bg-gradient-to-b from-gray-50 to-white py-16 px-4">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-4xl font-extrabold text-center mb-2 text-gray-800">
-          Featured Products
-        </h1>
-        <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
-          Discover our handpicked selection of premium products at competitive prices
-        </p>
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-extrabold mb-3 text-gray-800 relative inline-block">
+            Featured Products
+            <span className="absolute bottom-0 left-0 w-full h-1 bg-blue-500 transform -translate-y-2"></span>
+          </h1>
+          <p className="text-gray-600 max-w-2xl mx-auto">
+            Discover our handpicked selection of premium products at competitive prices
+          </p>
+        </div>
 
-        <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4">
+        <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {products.map((pro) => (
             <div
               key={pro._id}
-              className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transform transition-all duration-300 text-center border border-gray-100"
+              className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 border border-gray-100 flex flex-col h-full group"
             >
               <div className="relative group">
                 <div className="flex justify-center items-center h-56 bg-gray-50 overflow-hidden">
@@ -55,39 +58,44 @@ const FetchProduct = () => {
                   />
                 </div>
                 <div className="absolute top-3 right-3">
-                  <div className="bg-green-100 text-green-800 text-xs font-semibold px-2 py-1 rounded-full">
+                  <div className="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
                     New
                   </div>
                 </div>
               </div>
 
-            <div className="p-5">
-              <h2 className="text-lg font-semibold text-gray-800 truncate">
-                {pro.productName}
-              </h2>
-              <p className="text-sm text-gray-600 mt-1 line-clamp-2 h-10">
-                {pro.productDescription}
-              </p>
-
-              <div className="mt-3 flex justify-center items-center gap-2">
-                <span className="text-gray-500 text-sm line-through">
-                  Rs {pro.originalPrice || pro.productPrice + 500} 
-                </span>
-                <span className="text-green-600 font-bold text-lg">
-                  Rs {pro.productPrice}
-                </span>
+            <div className="p-5 flex-grow flex flex-col justify-between">
+              <div>
+                <h2 className="text-lg font-semibold text-gray-800 mb-1 hover:text-blue-600 transition-colors truncate">
+                  {pro.productName}
+                </h2>
+                <p className="text-sm text-gray-600 line-clamp-2 h-10">
+                  {pro.productDescription}
+                </p>
               </div>
 
-              <div className="mt-3 flex items-center justify-center gap-1 mb-5">
-                {renderStars(pro.totalRating || 4)}
-              </div>
+              <div className="mt-auto">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-1.5">
+                    {renderStars(pro.totalRating || 4)}
+                  </div>
+                  <div className="flex flex-col items-end">
+                    <span className="text-gray-500 text-xs line-through">
+                      Rs {pro.originalPrice || pro.productPrice + 500} 
+                    </span>
+                    <span className="text-blue-600 font-bold text-lg">
+                      Rs {pro.productPrice}
+                    </span>
+                  </div>
+                </div>
 
-              <Link 
-                to={`/singleProduct/${pro._id}`} 
-                className="block w-full px-4 py-2.5 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors"
-              >
-                View Product
-              </Link>
+                <Link 
+                  to={`/singleProduct/${pro._id}`} 
+                  className="block w-full px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors text-center"
+                >
+                  View Product
+                </Link>
+              </div>
             </div>
           </div>
         ))}
