@@ -50,13 +50,13 @@ const SingleProduct = () => {
         <>
             <Navbar />
             <div className="pt-16 px-4 md:px-8 max-w-screen-xl mx-auto">
-                <div className="bg-white min-h-screen py-8 px-4 sm:px-6 lg:px-8">
+                <div className="bg-gradient-to-b from-gray-50 to-white min-h-screen py-8 px-4 sm:px-6 lg:px-8">
                     <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-10 py-10 px-6 relative">
                         <div className="relative flex justify-center items-center">
-                            <div className="bg-white p-4 rounded-2xl shadow-xl hover:shadow-2xl transition-transform transform hover:scale-105 flex justify-center">
+                            <div className="bg-white p-4 rounded-2xl shadow-md hover:shadow-xl transition-transform transform hover:scale-105 flex justify-center border border-gray-100">
                                 <img
                                     src={`http://localhost:3000/${singleProduct?.productImageUrl}`}
-                                    alt="Product"
+                                    alt={singleProduct?.productName || "Product"}
                                     className="w-[300px] object-cover rounded-xl"
                                 />
                             </div>
@@ -64,9 +64,9 @@ const SingleProduct = () => {
                             <button
                                 aria-label="Add to wishlist"
                                 title="Add to wishlist"
-                                className="absolute top-4 right-4 border border-gray-300 text-gray-700 bg-white rounded-full p-2 hover:bg-gray-100 transition shadow-sm"
+                                className="absolute top-4 right-4 border border-gray-300 text-gray-700 bg-white rounded-full p-2 hover:bg-blue-50 hover:border-blue-300 transition shadow-sm"
                             >
-                                <Bookmark size={20} className="text-gray-500 hover:text-indigo-600" />
+                                <Bookmark size={20} className="text-gray-500 hover:text-blue-600" />
                             </button>
                         </div>
                         <div className="flex flex-col justify-between space-y-6">
@@ -79,36 +79,32 @@ const SingleProduct = () => {
                                     <span className="bg-blue-100 text-blue-700 px-4 py-1 text-sm rounded-full font-semibold">
                                         Category: {singleProduct?.category}
                                     </span>
-                                    <span className="bg-purple-100 text-purple-700 px-4 py-1 text-sm rounded-full font-semibold">
-                                        Type: Headphones
+                                    <span className="bg-blue-50 text-blue-700 px-4 py-1 text-sm rounded-full font-semibold">
+                                        Type: {singleProduct?.category || "Product"}
                                     </span>
                                 </div>
 
                                 <div className="flex items-center gap-4 text-2xl font-bold">
-                                    <span className="text-red-600">Rs. {singleProduct?.productPrice}</span>
-                                    <span className="line-through text-gray-400 text-xl">Rs. 1000</span>
-                                    <span className="text-sm bg-yellow-100 text-yellow-800 px-2 py-1 rounded-md font-semibold">
-                                        -20%
-                                    </span>
-                                    <span className="text-sm bg-green-100 text-green-700 px-2 py-1 rounded-md font-semibold">
+                                    <span className="text-blue-600">Rs. {singleProduct?.productPrice}</span>
+                                    <span className="text-sm bg-blue-50 text-blue-700 px-2 py-1 rounded-md font-semibold">
                                         On Sale
                                     </span>
                                 </div>
 
-                                <hr className="my-4 border-gray-300" />
+                                <hr className="my-4 border-gray-200" />
 
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-2 text-gray-700 text-sm">
                                     <p>
                                         <span className="font-medium text-gray-900">Brand:</span> {singleProduct?.category}
                                     </p>
                                     <p>
-                                        <span className="font-medium text-gray-900">SKU:</span> JBL-HDP-001
+                                        <span className="font-medium text-gray-900">SKU:</span> {singleProduct?._id?.substring(0, 8) || "JBL-001"}
                                     </p>
                                     <p>
                                         <span className="font-medium text-gray-900">Released:</span> 01/01/2024
                                     </p>
                                     <p>
-                                        <span className="font-medium text-gray-900">Stock:</span> {singleProduct?.productTotalStockQuantity}
+                                        <span className="font-medium text-gray-900">Stock:</span> <span className="text-blue-600 font-medium">{singleProduct?.productTotalStockQuantity}</span>
                                     </p>
                                 </div>
 
@@ -119,12 +115,33 @@ const SingleProduct = () => {
                                     </p>
                                 </div>
 
-                                <div className="flex flex-wrap gap-4 pt-4">
-                                    <button onClick={handleAddToCart}   className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-xl shadow-md transition">
+                                <div className="pt-6 flex items-center gap-4 mb-4">
+                                    <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden">
+                                        <button 
+                                            onClick={() => quantity > 1 && setQuantity(quantity - 1)}
+                                            className="px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 transition-colors"
+                                        >
+                                            <FaMinus size={12} />
+                                        </button>
+                                        <span className="px-4 py-2 font-medium">{quantity}</span>
+                                        <button 
+                                            onClick={() => setQuantity(quantity + 1)}
+                                            className="px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 transition-colors"
+                                        >
+                                            <FaPlus size={12} />
+                                        </button>
+                                    </div>
+                                    <span className="text-sm text-gray-500">
+                                        {singleProduct?.productTotalStockQuantity ? `${singleProduct.productTotalStockQuantity} units available` : "Out of stock"}
+                                    </span>
+                                </div>
+
+                                <div className="flex flex-wrap gap-4">
+                                    <button 
+                                        onClick={handleAddToCart} 
+                                        className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg shadow-md transition-colors text-base font-medium"
+                                    >
                                         <FaShoppingCart /> Add to Cart
-                                    </button>
-                                    <button className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-xl shadow-md transition">
-                                        <FaMoneyBillWave /> Buy Now
                                     </button>
                                 </div>
                             </div>
