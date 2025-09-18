@@ -25,6 +25,23 @@ app.use(express.static("./storage"));
 
 connectDB()//call the function from the mongodb.js
 
+// Add a root route
+app.get("/", (req, res) => {
+    res.json({ 
+        message: "E-commerce API is running!", 
+        status: "success",
+        endpoints: {
+            users: "/api",
+            products: "/api/product",
+            categories: "/api/category",
+            cart: "/api/cart",
+            orders: "/api/order",
+            wishlist: "/api/wishlist",
+            reviews: "/api/ratingReview"
+        }
+    });
+});
+
 //Routes
 
 app.use("/api", userRoutes)
