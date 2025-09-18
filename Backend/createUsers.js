@@ -1,56 +1,58 @@
-import User from "./models/userModel.js";
-import connectDB from "./config/mongodb.js";
-import bcrypt from "bcrypt";
+// createUsers.js
 import dotenv from "dotenv";
+import mongoose from "mongoose";
+import bcrypt from "bcrypt";
+import User from "./models/userModel.js"; // <-- make sure this exists
 
 dotenv.config();
 
-// Function to create users
-const createUsers = async () => {
-  try {
-    // Connect to the database
-    await connectDB();
-    console.log("Connected to MongoDB");
+// pick up your DB connection string from .env
+const URI = process.env.MONGODB_URI || process.env.MONGO_URI;
 
-    // Check if admin already exists
-    const existingAdmin = await User.findOne({ email: "admin@example.com" });
-    if (existingAdmin) {
-      console.log("Admin user already exists!");
-    } else {
-      // Create admin user
-      const adminPassword = await bcrypt.hash("adminpassword123", 14);
-      const newAdmin = await User.create({
-        username: "admin_user",
-        email: "admin@example.com",
-        password: adminPassword,
-        role: "admin"
-      });
-      console.log("Admin user created successfully:", newAdmin.username);
-    }
+// helper function to upsert a user
+async function upsertUser({ username, email, password, role }) {
+  const hashed = await bcrypt.hash(password, 14);
+  await User.findOneAndUpdate(
+    { email }, // match by email
+    { username, email, password: hashed, role },
+    { upsert: true, new: true }
+  );
+  console.log(`✅ Upserted: ${email} (${role})`);
+}
 
-    // Check if regular user already exists
-    const existingUser = await User.findOne({ email: "user@example.com" });
-    if (existingUser) {
-      console.log("Regular user already exists!");
-    } else {
-      // Create regular user
-      const userPassword = await bcrypt.hash("userpassword123", 14);
-      const newUser = await User.create({
-        username: "regular_user",
-        email: "user@example.com",
-        password: userPassword,
-        role: "user"
-      });
-      console.log("Regular user created successfully:", newUser.username);
-    }
+async function main() {
+  if (!URI) throw new Error("❌ Missing MONGODB_URI / MONGO_URI in .env");
 
-    console.log("User creation process completed!");
-    process.exit(0);
-  } catch (error) {
-    console.error("Error creating users:", error);
-    process.exit(1);
+  await mongoose.connect(URI);
+  console.log("✅ Connected to MongoDB");
+
+  // === Define the accounts you want ===
+  const accounts = [
+    // First set
+    { username: "admin_user1",   email: "admin@example.com",  password: "adminpassword123", role: "admin" },
+    { username: "regular_user1", email: "user@example.com",   password: "userpassword123",  role: "user"  },
+
+    // Second set
+    { username: "admin_user2",   email: "admin2@example.com", password: "adminpassword456", role: "admin" },
+    { username: "regular_user2", email: "user2@example.com",  password: "userpassword456",  role: "user"  },
+
+    // Third set
+    { username: "admin_user3",   email: "admin3@example.com", password: "adminpassword789", role: "admin" },
+    { username: "regular_user3", email: "user3@example.com",  password: "userpassword789",  role: "user"  },
+  ];
+
+  // loop through all accounts and upsert them
+  for (const a of accounts) {
+    await upsertUser(a);
   }
-};
 
-// Run the function
-createUsers();
+  await mongoose.disconnect();
+  console.log("🌱 Seeding finished");
+}
+
+// run the script
+main().catch(async (err) => {
+  console.error("❌ Error creating users:", err);
+  try { await mongoose.disconnect(); } catch {}
+  process.exit(1);
+});
