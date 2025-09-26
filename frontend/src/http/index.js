@@ -2,7 +2,7 @@ import axios from "axios";
 
 //without login
 const API=axios.create({
-    baseURL : 'http://localhost:3000/',
+    baseURL : 'https://ecom-app-demo-backend.onrender.com',
     headers :{
         'Content-Type' : 'application/json',
         'Accept' : 'application/json'
@@ -11,7 +11,7 @@ const API=axios.create({
 
 //authenticate user
 const APIAuthenticated=axios.create({
-    baseURL : 'http://localhost:3000/',
+    baseURL : 'https://ecom-app-demo-backend.onrender.com',
     headers :{
         'Content-Type' : 'application/json',
         'Accept' : 'application/json'
@@ -26,5 +26,6 @@ APIAuthenticated.interceptors.request.use((config)=>{
     return config;
 }, (error)=> Promise.reject(error)
 )
+
 
 export {API, APIAuthenticated}
