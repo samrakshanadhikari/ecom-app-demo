@@ -8,7 +8,7 @@ Built with modern tools and designed to demonstrate full-stack development, API 
 ## 🚀 Live Demo
 
 - **Frontend:** [ecom-app-demo.vercel.app](https://ecom-app-demo.vercel.app/)
-- **Backend API:** [ecom-backend.onrender.com](https://ecom-backend.onrender.com)  
+
 
 **Demo Login Credentials**  
 
@@ -55,3 +55,4 @@ Samrakshyan Adhikari
 GitHub: @samrakshanadhikari
 
 LinkedIn: linkedin.com/in/samrakshyanadhikari
+
