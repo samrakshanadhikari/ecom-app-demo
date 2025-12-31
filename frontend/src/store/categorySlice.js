@@ -64,8 +64,15 @@ export function addCategory(categoryData) {
                 formData.append('image', categoryData.image);
             }
             
+            console.log("📤 Sending category creation request:");
+            console.log("  - Category name:", categoryData.categoryName);
+            console.log("  - Has image:", !!categoryData.image);
+            console.log("  - FormData entries:", Array.from(formData.entries()).map(([k, v]) => [k, v instanceof File ? v.name : v]));
+            
             // Don't set Content-Type header - let browser set it automatically with boundary
             const response = await APIAuthenticated.post("/api/category/", formData);
+            
+            console.log("✅ Category creation response:", response.data);
             if (response.status === 200) {
                 dispatch(setStatus(STATUS.SUCCESS));
                 dispatch(listAllCategory());

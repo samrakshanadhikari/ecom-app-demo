@@ -27,6 +27,10 @@ APIAuthenticated.interceptors.request.use((config)=>{
     if (config.data instanceof FormData) {
         delete config.headers['Content-Type'];
         delete config.headers['content-type'];
+        console.log("📤 FormData request detected - Content-Type will be set by browser");
+        console.log("  - URL:", config.url);
+        console.log("  - Method:", config.method);
+        console.log("  - Has token:", !!token);
     }
     return config;
 }, (error)=> Promise.reject(error)
