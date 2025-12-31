@@ -6,7 +6,23 @@ import { upload } from "../middleware/multerMiddleware.js"
 const router=Router();
 
 
-router.route("/").post(isAuthenticated, restrictTo(Role.Admin),upload.single('image'), errorHandle(createCategory))
+router.route("/").post(
+    isAuthenticated, 
+    restrictTo(Role.Admin),
+    (req, res, next) => {
+        upload.single('image')(req, res, (err) => {
+            if (err) {
+                console.error("❌ Multer error:", err.message);
+                return res.status(400).json({ 
+                    message: "File upload error", 
+                    error: err.message 
+                });
+            }
+            next();
+        });
+    },
+    errorHandle(createCategory)
+)
 .get(getAllCategory)
 
 router.route("/:id").get(errorHandle(fetchSingleCategory))

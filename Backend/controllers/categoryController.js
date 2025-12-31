@@ -3,10 +3,19 @@ import Category from "../models/categoryModel.js";
 // Create category API with image upload
 export const createCategory = async (req, res) => {
     try {
-        const userId = req.user.id;
+        console.log("📥 Category creation request received");
+        console.log("  - User ID:", req.user?.id);
+        console.log("  - Body:", req.body);
+        console.log("  - File:", req.file ? req.file.filename : "none");
+        
+        const userId = req.user?.id;
+        if (!userId) {
+            return res.status(401).json({ message: "User not authenticated" });
+        }
+
         const { categoryName } = req.body;
 
-        if (!categoryName) {
+        if (!categoryName || categoryName.trim() === "") {
             return res.status(400).json({ message: "Category name is required" });
         }
 
@@ -15,23 +24,41 @@ export const createCategory = async (req, res) => {
             categoryImageUrl = req.file.filename;
             console.log("✅ File uploaded:", categoryImageUrl);
         } else {
-            console.log("⚠️ No file uploaded");
+            console.log("⚠️ No file uploaded (this is okay)");
         }
 
-        const existingCategory = await Category.findOne({ categoryName });
+        // Check for existing category (case-insensitive)
+        const existingCategory = await Category.findOne({ 
+            categoryName: { $regex: new RegExp(`^${categoryName}$`, "i") } 
+        });
+        
         if (existingCategory) {
+            console.log("⚠️ Category already exists:", existingCategory.categoryName);
             return res.status(400).json({ message: "Category name must be unique" });
         }
 
         const category = await Category.create({
-            categoryName,
+            categoryName: categoryName.trim(),
             categoryImageUrl, 
             userId
         });
 
+        console.log("✅ Category created successfully:", category._id);
         res.status(200).json({ message: "Category created successfully", data: category });
     } catch (error) {
         console.error("❌ Category creation error:", error);
+        console.error("  - Error name:", error.name);
+        console.error("  - Error message:", error.message);
+        console.error("  - Error stack:", error.stack);
+        
+        // Handle specific MongoDB errors
+        if (error.name === 'ValidationError') {
+            return res.status(400).json({ 
+                message: "Validation error", 
+                error: error.message 
+            });
+        }
+        
         res.status(500).json({ 
             message: "Error creating category", 
             error: error.message 
