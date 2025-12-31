@@ -52,15 +52,23 @@ export function register(data) {
   return async function registerUserThunk(dispatch) {
     dispatch(setStatus(STATUS.LOADING));
     try {
+      console.log("📤 Registering user:", data);
       const response = await API.post("/api/register", data);
+      console.log("✅ Registration response:", response);
       if (response.status === 200) {
         dispatch(setUserData(response.data)); 
         dispatch(setStatus(STATUS.SUCCESS));
+        return { success: true, message: "Registration successful!" };
       } else {
         dispatch(setStatus(STATUS.ERROR));
+        return { success: false, message: "Registration failed" };
       }
     } catch (err) {
+      console.error("❌ Registration error:", err);
+      console.error("  - Response:", err.response?.data);
       dispatch(setStatus(STATUS.ERROR));
+      const errorMessage = err.response?.data?.message || err.response?.data?.error || "Registration failed. Please try again.";
+      return { success: false, message: errorMessage };
     }
   };
 }

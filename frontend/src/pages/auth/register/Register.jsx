@@ -38,7 +38,7 @@ const Register = () => {
     setAcceptTerms(e.target.checked);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
     // Clear previous errors
@@ -48,29 +48,39 @@ const Register = () => {
     // Validate password match
     if (userData.password !== confirmPassword) {
       setPasswordError('Passwords do not match');
+      toast.error('Passwords do not match');
       return;
     }
     
     // Make sure terms are accepted
     if (!acceptTerms) {
       setTermsError('You must accept the Terms and Conditions');
+      toast.error('You must accept the Terms and Conditions');
       return;
     }
     
-    dispatch(register(userData));
+    console.log("🚀 Submitting registration:", userData);
+    const result = await dispatch(register(userData));
+    
+    console.log("📥 Registration result:", result);
+    
+    if (result && result.success) {
+      toast.success('Account created successfully! Please login.');
+      setTimeout(() => {
+        dispatch(resetStatus());
+        navigate('/login');
+      }, 1500);
+    } else {
+      toast.error(result?.message || 'Registration failed. Please try again.');
+    }
   };
 
   useEffect(() => {
-    if (status === STATUS.SUCCESS) {
-      toast.success('Registration successful');
-      dispatch(resetStatus())
-      navigate('/login');
-    }
-
-    if (status === STATUS.ERROR) {
-      toast.error('Registration failed');
-    }
-  }, [status, navigate]);
+    // Reset status when component unmounts
+    return () => {
+      dispatch(resetStatus());
+    };
+  }, [dispatch]);
 
   return (
     <>
