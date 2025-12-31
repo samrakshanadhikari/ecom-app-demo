@@ -118,15 +118,27 @@ export function listProductByCategory(categoryName) {
     return async function listProductByCategoryThunk(dispatch) {
         dispatch(setStatus(STATUS.LOADING));
         try {
-            const response = await API.get(`/api/product/category/${categoryName}`);
+            // Encode category name for URL
+            const encodedCategoryName = encodeURIComponent(categoryName);
+            console.log("📤 Fetching products for category:", categoryName, "->", encodedCategoryName);
+            
+            const response = await API.get(`/api/product/category/${encodedCategoryName}`);
+            
+            console.log("✅ Products response:", response.data);
+            
             if (response.status === 200) {
-                dispatch(setproductByCategory(response.data.data));  
+                const products = response.data.data || [];
+                console.log(`✅ Found ${products.length} products`);
+                dispatch(setproductByCategory(products));  
                 dispatch(setStatus(STATUS.SUCCESS));
             } else {
                 dispatch(setStatus(STATUS.ERROR));
             }
         } catch (err) {
-            console.error(err);
+            console.error("❌ Error fetching products by category:", err);
+            console.error("Error response:", err.response?.data);
+            // Set empty array on error so UI shows "no products" instead of crashing
+            dispatch(setproductByCategory([]));
             dispatch(setStatus(STATUS.ERROR));
         }
     };

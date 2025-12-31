@@ -15,7 +15,10 @@ const ProductByCategory = () => {
 
   useEffect(() => {
     if (categoryName) {
-      dispatch(listProductByCategory(categoryName));
+      // Decode the category name from URL
+      const decodedCategoryName = decodeURIComponent(categoryName);
+      console.log("🔍 Loading products for category:", decodedCategoryName);
+      dispatch(listProductByCategory(decodedCategoryName));
     }
   }, [dispatch, categoryName]);
 

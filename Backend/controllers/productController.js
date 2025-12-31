@@ -75,18 +75,56 @@ export const deleteProduct= async(req, res)=>{
 }
 
 export const getProductsByCategory = async (req, res) => {
-  const { category } = req.params;
+  try {
+    const { category } = req.params;
 
-  if (!category) {
-    return res.status(400).json({ message: "Category is required" });
+    if (!category) {
+      return res.status(400).json({ message: "Category is required" });
+    }
+
+    // Decode URL-encoded category name
+    const decodedCategory = decodeURIComponent(category);
+    console.log("🔍 Searching for category:", decodedCategory);
+
+    // Try exact match first (case-insensitive)
+    let products = await Product.find({ 
+      category: { $regex: new RegExp(`^${decodedCategory}$`, "i") } 
+    });
+
+    // If no exact match, try partial match (category name starts with the search term)
+    // This handles cases where category names have timestamps appended
+    if (products.length === 0) {
+      console.log("⚠️ No exact match, trying partial match...");
+      products = await Product.find({ 
+        category: { $regex: new RegExp(`^${decodedCategory}`, "i") } 
+      });
+    }
+
+    // If still no match, try reverse - search term starts with category
+    // This handles cases where products have "TestCategory" but categories are "TestCategory_123"
+    if (products.length === 0) {
+      console.log("⚠️ No partial match, trying reverse match...");
+      // Get all products and filter by checking if category name contains the search term
+      const allProducts = await Product.find();
+      products = allProducts.filter(product => {
+        const productCategory = product.category || "";
+        return productCategory.toLowerCase().includes(decodedCategory.toLowerCase()) ||
+               decodedCategory.toLowerCase().includes(productCategory.toLowerCase());
+      });
+    }
+
+    console.log(`✅ Found ${products.length} products for category: ${decodedCategory}`);
+
+    if (products.length === 0) {
+      return res.status(200).json({ 
+        message: `No products found for category: ${decodedCategory}`, 
+        data: [] 
+      });
+    }
+
+    res.status(200).json({ message: "Products fetched successfully", data: products });
+  } catch (error) {
+    console.error("❌ Error fetching products by category:", error);
+    res.status(500).json({ message: "Error fetching products", error: error.message });
   }
-
-  // Use case-insensitive regex to match category
-  const products = await Product.find({ category: { $regex: new RegExp(`^${category}$`, "i") } });
-
-  if (products.length === 0) {
-    return res.status(404).json({ message: `No products found for category: ${category}` });
-  }
-
-  res.status(200).json({ message: "Products fetched successfully", data: products });
 };
