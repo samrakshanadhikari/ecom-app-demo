@@ -64,7 +64,7 @@ export function addCategory(categoryData) {
                 formData.append('image', categoryData.image);
             }
             
-            const response = await APIAuthenticated.post("/api/category", formData, {
+            const response = await APIAuthenticated.post("/api/category/", formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
@@ -78,8 +78,12 @@ export function addCategory(categoryData) {
         } catch (err) {
             console.error("Category creation error:", err);
             console.error("Error response:", err.response?.data);
+            console.error("Error status:", err.response?.status);
+            console.error("Error message:", err.message);
             dispatch(setStatus(STATUS.ERROR));
-            throw err; // Re-throw so component can handle it
+            // Re-throw with more details
+            const errorMessage = err.response?.data?.message || err.response?.data?.error || err.message || "Failed to create category";
+            throw new Error(errorMessage);
         }
     };
 }
