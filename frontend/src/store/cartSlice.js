@@ -61,14 +61,20 @@ export function fetchCartItem() {
   return async function fetchCartItemThunk(dispatch) {
     dispatch(setStatus(STATUS.LOADING));
     try {
+      console.log("📡 Fetching cart items from API...");
       const response = await APIAuthenticated.get("/api/cart");
+      console.log("✅ Cart API response:", response.data);
       if (response.status === 200) {
         dispatch(setCartData(response.data)); 
         dispatch(setStatus(STATUS.SUCCESS));
+        console.log("✅ Cart data stored in Redux");
       } else {
+        console.log("❌ Unexpected status:", response.status);
         dispatch(setStatus(STATUS.ERROR));
       }
     } catch (err) {
+      console.error("❌ Error fetching cart:", err);
+      console.error("  - Response:", err.response?.data);
       dispatch(setStatus(STATUS.ERROR));
     }
   };
