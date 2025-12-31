@@ -23,9 +23,10 @@ APIAuthenticated.interceptors.request.use((config)=>{
     if(token){
         config.headers.Authorization=token;
     }
-    // Don't override Content-Type if it's already set (for FormData)
+    // For FormData, remove Content-Type header so browser can set it with boundary
     if (config.data instanceof FormData) {
-        delete config.headers['Content-Type']; // Let browser set it with boundary
+        delete config.headers['Content-Type'];
+        delete config.headers['content-type'];
     }
     return config;
 }, (error)=> Promise.reject(error)

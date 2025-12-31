@@ -64,11 +64,8 @@ export function addCategory(categoryData) {
                 formData.append('image', categoryData.image);
             }
             
-            const response = await APIAuthenticated.post("/api/category/", formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            });
+            // Don't set Content-Type header - let browser set it automatically with boundary
+            const response = await APIAuthenticated.post("/api/category/", formData);
             if (response.status === 200) {
                 dispatch(setStatus(STATUS.SUCCESS));
                 dispatch(listAllCategory());
