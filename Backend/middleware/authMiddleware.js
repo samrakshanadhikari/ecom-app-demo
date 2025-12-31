@@ -4,7 +4,8 @@ import jwt from "jsonwebtoken"
 //define the role
 export const Role={
     Admin :"admin",
-    User : "user"
+    User : "user",
+    Customer: "customer"
 }
 
 //

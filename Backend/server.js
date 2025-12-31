@@ -1,4 +1,7 @@
 import express from "express"
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 import connectDB from "./config/mongodb.js"; //import from the mongodb.js 
 import userRoutes from "./routes/userRoutes.js"
 import productRoutes from "./routes/productRoutes.js"
@@ -12,6 +15,9 @@ import cors from "cors"
 
 import dotenv from "dotenv"
 dotenv.config();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 console.log("🚀 Starting server...");
 console.log("📝 Environment check:");
@@ -27,7 +33,11 @@ const PORT= process.env.PORT || 3000;
 app.use(cors())
 app.use(express.json());
 app.use(express.urlencoded());
-app.use(express.static("./storage"));
+
+// Serve static files from storage directory (ABSOLUTE PATH for production compatibility)
+const storageDir = path.join(__dirname, 'storage');
+console.log("📁 Serving static files from:", storageDir);
+app.use(express.static(storageDir));
 
 // Connect to database
 console.log("🔄 Attempting to connect to MongoDB...");

@@ -5,28 +5,41 @@ import jwt from "jsonwebtoken";
 //User registration
 export const userRegistration = async (req, res) => {
     try {
+        console.log("📝 Registration request received:", { username: req.body.username, email: req.body.email, role: req.body.role });
+        
         const { username, email, password, role } = req.body; 
         if (!username || !email || !password) {
+            console.log("❌ Missing required fields");
             return res.status(400).json({ message: "Username, email, password must required" });
         }
 
         const existingUser = await User.findOne({ email });
 
         if (existingUser) {
-            return res.status(404).json({ message: "Email is already register!" })
+            console.log("❌ Email already exists:", email);
+            return res.status(400).json({ message: "Email is already registered!" })
         }
 
+        console.log("🔐 Hashing password...");
         const hashedPassword = await bcrypt.hash(password, 14); // password hashing   
+        
+        console.log("💾 Creating user in database...");
         const newUser = await User.create({
             username,
             email,
             password: hashedPassword,
-            role
+            role: role || 'customer' // Default to customer if not provided
         })
-        res.status(200).json({ message: "User register successfully", data: newUser })
+        
+        console.log("✅ User created successfully:", newUser._id);
+        res.status(200).json({ message: "User registered successfully", data: newUser })
 
     } catch (err) {
-        res.status(500).json({ error: "Internal server error" })
+        console.error("❌ Registration error:", err);
+        console.error("  - Error name:", err.name);
+        console.error("  - Error message:", err.message);
+        console.error("  - Error stack:", err.stack);
+        res.status(500).json({ error: "Internal server error", message: err.message })
 
     }
 }
