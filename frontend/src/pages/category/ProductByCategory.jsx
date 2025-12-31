@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { listProductByCategory } from "../../store/productSlice"; 
+import { STATUS } from "../../globals/status/Status";
 import Navbar from "../../globals/components/navbar/Navbar";
 import { IMAGE_BASE_URL } from "../../config/api";
 
@@ -28,8 +29,15 @@ const ProductByCategory = () => {
       <div className="max-w-7xl mx-auto p-6 mt-16">
         <h1 className="text-3xl font-bold mb-8">Products in {categoryName}</h1>
 
-        {(!products || products.length === 0) ? (
-          <p>No products found in this category.</p>
+        {status === STATUS.LOADING ? (
+          <div className="text-center py-12">
+            <p className="text-gray-600">Loading products...</p>
+          </div>
+        ) : (!products || products.length === 0) ? (
+          <div className="text-center py-12">
+            <p className="text-gray-600 text-lg mb-4">No products found in this category.</p>
+            <p className="text-gray-500 text-sm">Try selecting a different category or add products to this category.</p>
+          </div>
         ) : (
           <div className="grid gap-6 grid-cols-2 sm:grid-cols-3 md:grid-cols-4">
             {products.map((product) => (
