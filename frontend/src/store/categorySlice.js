@@ -76,8 +76,10 @@ export function addCategory(categoryData) {
             if (response.status === 200) {
                 dispatch(setStatus(STATUS.SUCCESS));
                 dispatch(listAllCategory());
+                return { success: true, data: response.data };
             } else {
                 dispatch(setStatus(STATUS.ERROR));
+                return { success: false, error: "Failed to create category" };
             }
         } catch (err) {
             console.error("Category creation error:", err);
@@ -85,9 +87,9 @@ export function addCategory(categoryData) {
             console.error("Error status:", err.response?.status);
             console.error("Error message:", err.message);
             dispatch(setStatus(STATUS.ERROR));
-            // Re-throw with more details
+            // Return error instead of throwing
             const errorMessage = err.response?.data?.message || err.response?.data?.error || err.message || "Failed to create category";
-            throw new Error(errorMessage);
+            return { success: false, error: errorMessage };
         }
     };
 }

@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../dashboard/sidebar/Sidebar';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addCategory } from '../../store/categorySlice';
+import { STATUS } from '../../globals/status/Status';
 import { FaTag, FaUpload, FaArrowLeft, FaImage, FaInfoCircle, FaFolder, FaLayerGroup } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 
 const AddCategory = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const categoryStatus = useSelector((state) => state.category.status);
 
     const [categoryData, setCategoryData] = useState({
         categoryName: "",
@@ -80,14 +82,17 @@ const AddCategory = () => {
         setIsSubmitting(true);
         
         try {
-            await dispatch(addCategory(categoryData)).unwrap();
-            toast.success("Category added successfully");
-            navigate("/categoryList");
+            const result = await dispatch(addCategory(categoryData));
+            if (result && result.success) {
+                toast.success("Category added successfully");
+                navigate("/categoryList");
+            } else {
+                const errorMessage = result?.error || "Error creating category. Please try again.";
+                toast.error(errorMessage);
+            }
         } catch (error) {
             console.error("Category creation failed:", error);
-            const errorMessage = error.message || "Error creating category. Please try again.";
-            toast.error(errorMessage);
-            console.error("Full error:", error);
+            toast.error("Error creating category. Please try again.");
         } finally {
             setIsSubmitting(false);
         }
