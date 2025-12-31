@@ -10,6 +10,7 @@ import cartRoutes from "./routes/cartRoutes.js"
 import orderRoutes from "./routes/orderRoutes.js"
 import wishlistRoutes from "./routes/wishlistRoute.js"
 import ratingReviewsRoutes from "./routes/ratingReviewRoutes.js"
+import cleanupRoutes from "./routes/cleanupRoutes.js"
 
 import cors from "cors"
 
@@ -72,6 +73,7 @@ app.use("/api/cart", cartRoutes)
 app.use("/api/order", orderRoutes)
 app.use("/api/wishlist", wishlistRoutes)
 app.use("/api/ratingReview", ratingReviewsRoutes)
+app.use("/api/admin", cleanupRoutes)
 
 
 app.listen(PORT, ()=>{
