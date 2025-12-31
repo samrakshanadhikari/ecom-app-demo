@@ -53,13 +53,19 @@ export const userLogin = async (req, res) => {
         }
 
         const payload = { id: existingUser.id, role: existingUser.role }
+        
+        if (!process.env.JWT_SECRETE) {
+            console.error("❌ JWT_SECRETE is not defined in environment variables!");
+            return res.status(500).json({ error: "Server configuration error: JWT_SECRETE missing" });
+        }
+        
         const token = jwt.sign(payload, process.env.JWT_SECRETE, { expiresIn: "1h" });
         
         res.status(200).json({ message: "User login successfull", token, data: existingUser })
 
     } catch (err) {
-        res.status(500).json({ error: "Internal server error" })
-
+        console.error("Login error:", err);
+        res.status(500).json({ error: "Internal server error", message: err.message })
     }
 }
 

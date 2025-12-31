@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchCartItem } from '../../store/cartSlice';
 import { useNavigate } from 'react-router-dom';
 import { submitOrder } from '../../store/orderSlice';
+import { IMAGE_BASE_URL } from '../../config/api';
 
 const Checkout = () => {
   const [paymentMethod, setPaymentMethod] = useState('COD');
@@ -69,7 +70,7 @@ const Checkout = () => {
                     className="flex items-center bg-gray-50 border border-gray-200 p-4 rounded-lg"
                   >
                     <img
-                      src={`http://localhost:3000/${item?.productId?.productImageUrl}`}
+                      src={`${IMAGE_BASE_URL}/${item?.productId?.productImageUrl}`}
                       alt="Book"
                       className="w-20 h-20 object-cover rounded-lg"
                     />

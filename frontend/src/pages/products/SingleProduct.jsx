@@ -9,6 +9,7 @@ import {useDispatch, useSelector} from "react-redux"
 import { STATUS } from '../../globals/status/Status';
 import {toast} from "react-toastify"
 import { addToCart } from '../../store/cartSlice';
+import { IMAGE_BASE_URL } from '../../config/api';
 
 
 const SingleProduct = () => {
@@ -55,7 +56,7 @@ const SingleProduct = () => {
                         <div className="relative flex justify-center items-center">
                             <div className="bg-white p-4 rounded-2xl shadow-md hover:shadow-xl transition-transform transform hover:scale-105 flex justify-center border border-gray-100">
                                 <img
-                                    src={`http://localhost:3000/${singleProduct?.productImageUrl}`}
+                                    src={`${IMAGE_BASE_URL}/${singleProduct?.productImageUrl}`}
                                     alt={singleProduct?.productName || "Product"}
                                     className="w-[300px] object-cover rounded-xl"
                                 />

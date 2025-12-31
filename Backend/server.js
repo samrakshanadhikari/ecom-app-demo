@@ -13,6 +13,12 @@ import cors from "cors"
 import dotenv from "dotenv"
 dotenv.config();
 
+console.log("🚀 Starting server...");
+console.log("📝 Environment check:");
+console.log("  - NODE_ENV:", process.env.NODE_ENV || "not set");
+console.log("  - PORT:", process.env.PORT || "3000 (default)");
+console.log("  - MONGODB_URI:", process.env.MONGODB_URI ? "✅ Set" : "❌ NOT SET");
+console.log("  - JWT_SECRETE:", process.env.JWT_SECRETE ? "✅ Set" : "❌ NOT SET");
 
 const app=express();
 const PORT= process.env.PORT || 3000;
@@ -23,7 +29,12 @@ app.use(express.json());
 app.use(express.urlencoded());
 app.use(express.static("./storage"));
 
-connectDB()//call the function from the mongodb.js
+// Connect to database
+console.log("🔄 Attempting to connect to MongoDB...");
+connectDB().catch((error) => {
+    console.error("❌ Failed to connect to MongoDB on startup:", error.message);
+    console.error("⚠️ Server will continue but database operations will fail");
+});
 
 // Add a root route
 app.get("/", (req, res) => {

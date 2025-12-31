@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { listProductByCategory } from "../../store/productSlice"; 
 import Navbar from "../../globals/components/navbar/Navbar";
+import { IMAGE_BASE_URL } from "../../config/api";
 
 const ProductByCategory = () => {
   const { categoryName } = useParams();
@@ -31,7 +32,7 @@ const ProductByCategory = () => {
             {products.map((product) => (
               <div key={product._id || product.id} className="border rounded-lg p-4 shadow hover:shadow-lg transition">
                 <img
-                  src={`http://localhost:3000/${product.productImageUrl}`}
+                  src={`${IMAGE_BASE_URL}/${product.productImageUrl}`}
                   alt={product.productName}
                   className="w-full h-40 object-contain mb-4"
                 />

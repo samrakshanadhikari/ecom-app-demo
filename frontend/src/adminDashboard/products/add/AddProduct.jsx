@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import Sidebar from '../../dashboard/sidebar/Sidebar';
 import { FaUpload, FaTag, FaBoxOpen, FaDollarSign, FaStar, FaImage, FaInfoCircle } from 'react-icons/fa';
 import { toast } from 'react-toastify';
+import { API_BASE_URL } from '../../../config/api';
 
 const AddProduct = () => {
   const navigate = useNavigate();
@@ -25,7 +26,7 @@ const AddProduct = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/category/");
+        const response = await axios.get(`${API_BASE_URL}/api/category/`);
         setCategories(response.data.data || response.data); 
       } catch (error) {
         console.error("Error fetching categories:", error);
@@ -74,7 +75,7 @@ const AddProduct = () => {
     }
 
     try {
-      const response = await axios.post("http://localhost:3000/api/product/create", formData, {
+      const response = await axios.post(`${API_BASE_URL}/api/product/create`, formData, {
         headers: {
           Authorization: `${token}`,
         }

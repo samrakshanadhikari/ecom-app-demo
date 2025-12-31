@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { listAllCategory } from "../../store/categorySlice";
 import { Link } from "react-router-dom";
+import { IMAGE_BASE_URL } from "../../config/api";
 
 const Category = () => {
   const dispatch = useDispatch();
@@ -25,7 +26,7 @@ const Category = () => {
           >
             <div className="flex justify-center items-center h-40 bg-gray-100 rounded-t-2xl overflow-hidden">
               <img
-                src={`http://localhost:3000/${cat.categoryImageUrl}`}
+                src={`${IMAGE_BASE_URL}/${cat.categoryImageUrl}`}
                 alt={cat.categoryName}
                 className="max-h-full object-contain"
               />

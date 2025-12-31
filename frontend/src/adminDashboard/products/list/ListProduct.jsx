@@ -4,6 +4,7 @@ import { FaEdit, FaTrash, FaRupeeSign, FaBoxOpen, FaStar, FaTags } from 'react-i
 import Sidebar from '../../dashboard/sidebar/Sidebar';
 import { Link } from 'react-router-dom';
 import Pagination from '../../pagination/Pagination';
+import { API_BASE_URL, IMAGE_BASE_URL } from '../../../config/api';
 
 const PAGE_SIZE = 4;
 
@@ -13,7 +14,7 @@ const ListProduct = () => {
 
     const fetchProducts = async () => {
         try {
-            const response = await axios.get('http://localhost:3000/api/product/getAll');
+            const response = await axios.get(`${API_BASE_URL}/api/product/getAll`);
             setProducts(response.data.data);
         } catch (error) {
             console.error('Error fetching products:', error);
@@ -42,7 +43,7 @@ const ListProduct = () => {
     const handleDelete = async (id) => {
         try {
             const token = localStorage.getItem('token');
-            await axios.delete(`http://localhost:3000/api/product/delete/${id}`, {
+            await axios.delete(`${API_BASE_URL}/api/product/delete/${id}`, {
                 headers: {
                     Authorization: `${token}`,
                 },
@@ -71,7 +72,7 @@ const ListProduct = () => {
                         >
                             {/* Image */}
                                 <img
-                                src={`http://localhost:3000/${product.productImageUrl}`}
+                                src={`${IMAGE_BASE_URL}/${product.productImageUrl}`}
                                 alt={product.productName}
                                 className="w-full md:w-40 h-36 object-cover rounded-md bg-white p-1"
                             />                            <div className="flex-1 flex flex-col gap-1 text-center md:text-left">

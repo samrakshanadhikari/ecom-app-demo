@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { FaStar, FaRegStar } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import { API_BASE_URL, IMAGE_BASE_URL } from '../../config/api';
 
 const FetchProduct = () => {
   const [products, setProducts] = useState([]);
@@ -9,7 +10,7 @@ const FetchProduct = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/product/getAll");
+        const response = await axios.get(`${API_BASE_URL}/api/product/getAll`);
         setProducts(response.data.data);
       } catch (error) {
         console.error("Error fetching products:", error);
@@ -51,7 +52,7 @@ const FetchProduct = () => {
               <div className="relative group">
                 <div className="flex justify-center items-center h-56 bg-gray-50 overflow-hidden">
                   <img
-                    src={`http://localhost:3000/${pro.productImageUrl}`}
+                    src={`${IMAGE_BASE_URL}/${pro.productImageUrl}`}
                     alt={pro.productName}
                     className="max-h-full object-contain group-hover:scale-105 transition-transform duration-300"
                   />

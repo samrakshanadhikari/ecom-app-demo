@@ -3,6 +3,7 @@ import Navbar from "../../globals/components/navbar/Navbar";
 import FetchProduct from "../products/FetchProduct";
 import Footer from "../../globals/components/footer/Footer";
 import Category from "../category/Category";
+import { IMAGE_BASE_URL } from "../../config/api";
 
 const LandingPage = () => {
   return (
@@ -76,7 +77,7 @@ const LandingPage = () => {
           <div className="w-full flex justify-center p-4">
             <div className="relative overflow-hidden rounded-2xl shadow-lg">
               <img
-                src="http://localhost:3000/1754813703505-electronics.jpeg"
+                src={`${IMAGE_BASE_URL}/1754813703505-electronics.jpeg`}
                 alt="Electronics Shopping"
                 className="w-full max-w-lg h-auto object-cover transform hover:scale-105 transition-transform duration-700"
               />

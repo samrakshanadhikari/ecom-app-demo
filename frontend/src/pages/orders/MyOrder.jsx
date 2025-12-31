@@ -4,6 +4,7 @@ import Navbar from "../../globals/components/navbar/Navbar";
 import Footer from "../../globals/components/footer/Footer";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchMyOrders } from "../../store/orderSlice";
+import { IMAGE_BASE_URL } from "../../config/api";
 
 const MyOrder = () => {
   const [filter, setFilter] = useState("pending");
@@ -43,7 +44,7 @@ const MyOrder = () => {
                       className="flex items-center gap-4 cursor-pointer"
                     >
                       <img
-                        src={`http://localhost:3000/${item.productId?.productImageUrl}`}
+                        src={`${IMAGE_BASE_URL}/${item.productId?.productImageUrl}`}
                         alt={item.productId?.productName || 'Product'}
                         className="w-14 h-20 object-cover rounded-lg shadow-sm"
                       />

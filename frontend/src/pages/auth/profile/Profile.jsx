@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import Navbar from '../../../globals/components/navbar/Navbar';
+import { API_BASE_URL } from '../../../config/api';
 
 const Profile = () => {
   const [user, setUser] = useState(null);
@@ -13,7 +14,7 @@ const Profile = () => {
     const fetchUserProfile = async () => {
       const token = localStorage.getItem('token');
       try {
-        const response = await axios.get("http://localhost:3000/api/profile", {
+        const response = await axios.get(`${API_BASE_URL}/api/profile`, {
           headers: { Authorization: `${token}` }
         });
         setUser(response.data.data);
@@ -35,7 +36,7 @@ const Profile = () => {
     const token = localStorage.getItem('token');
     try {
       await axios.patch(
-        `http://localhost:3000/api/updateUser/${user._id}`,
+        `${API_BASE_URL}/api/updateUser/${user._id}`,
         { username: userData.username },
         { headers: { Authorization: `${token}` } }
       );

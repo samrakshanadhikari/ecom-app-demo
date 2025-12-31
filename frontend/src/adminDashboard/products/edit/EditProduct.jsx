@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import Sidebar from '../../dashboard/sidebar/Sidebar';
+import { API_BASE_URL, IMAGE_BASE_URL } from '../../../config/api';
 
 const EditProduct = () => {
   const { id } = useParams();  
@@ -21,7 +22,7 @@ const EditProduct = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/api/product/singleProduct/${id}`);
+        const response = await axios.get(`${API_BASE_URL}/api/product/singleProduct/${id}`);
         const product = response.data.data; 
         setProductData({
           productName: product.productName,
@@ -60,7 +61,7 @@ const EditProduct = () => {
     }
 
     try {
-      await axios.patch(`http://localhost:3000/api/product/update/${id}`, formData, {
+      await axios.patch(`${API_BASE_URL}/api/product/update/${id}`, formData, {
         headers: {
           Authorization: `${token}`,
         }
@@ -96,7 +97,7 @@ const EditProduct = () => {
                   src={
                     productData.image
                       ? URL.createObjectURL(productData.image)
-                      : `http://localhost:3000/${productData.existingImageUrl}`
+                      : `${IMAGE_BASE_URL}/${productData.existingImageUrl}`
                   }
                   alt="Product preview"
                   className="w-48 h-48 object-cover rounded-xl shadow-lg transition-transform duration-300 hover:scale-105"

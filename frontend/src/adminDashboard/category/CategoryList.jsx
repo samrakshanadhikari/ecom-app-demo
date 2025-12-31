@@ -5,6 +5,7 @@ import Pagination from "../pagination/Pagination"; // your pagination component
 import { FaPen, FaTrash, FaSearch, FaTags, FaPlus } from "react-icons/fa";
 import { listAllCategory, deleteCategory } from "../../store/categorySlice";
 import { useNavigate } from "react-router-dom";
+import { IMAGE_BASE_URL } from "../../../config/api";
 
 const PAGE_SIZE = 10;
 
@@ -118,7 +119,7 @@ const CategoryList = () => {
                       <div className="flex items-center">
                         {category.categoryImageUrl ? (
                           <img
-                            src={`http://localhost:3000/${category.categoryImageUrl}`}
+                            src={`${IMAGE_BASE_URL}/${category.categoryImageUrl}`}
                             alt={category.categoryName || "category"}
                             className="w-10 h-10 object-cover rounded-md shadow-sm"
                           />
