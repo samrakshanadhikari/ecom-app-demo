@@ -96,12 +96,34 @@ export function addCategory(categoryData) {
             
             // Return error with more details
             let errorMessage = "Failed to create category";
+            
             if (err.response?.data) {
-                errorMessage = err.response.data.message || err.response.data.error || err.response.data.errorMessage || errorMessage;
+                // Prioritize message field, then error, then errorMessage
+                errorMessage = err.response.data.message || 
+                              err.response.data.error || 
+                              err.response.data.errorMessage || 
+                              errorMessage;
             } else if (err.message) {
                 errorMessage = err.message;
             }
             
+            // Handle specific error cases
+            if (err.response?.status === 400) {
+                // Bad request - usually duplicate category or validation error
+                if (errorMessage.toLowerCase().includes('unique')) {
+                    errorMessage = "This category name already exists. Please choose a different name.";
+                } else if (errorMessage.toLowerCase().includes('required')) {
+                    errorMessage = "Category name is required.";
+                }
+            } else if (err.response?.status === 401) {
+                errorMessage = "You are not authenticated. Please log in again.";
+            } else if (err.response?.status === 403) {
+                errorMessage = "You don't have permission to create categories. Admin access required.";
+            } else if (err.response?.status === 500) {
+                errorMessage = "Server error occurred. Please try again later.";
+            }
+            
+            console.error("❌ Final error message:", errorMessage);
             return { success: false, error: errorMessage };
         }
     };
