@@ -5,7 +5,7 @@ import Pagination from "../pagination/Pagination"; // your pagination component
 import { FaPen, FaTrash, FaSearch, FaTags, FaPlus } from "react-icons/fa";
 import { listAllCategory, deleteCategory } from "../../store/categorySlice";
 import { useNavigate } from "react-router-dom";
-import { IMAGE_BASE_URL } from "../../../config/api";
+import { IMAGE_BASE_URL } from "../../config/api";
 
 const PAGE_SIZE = 10;
 
