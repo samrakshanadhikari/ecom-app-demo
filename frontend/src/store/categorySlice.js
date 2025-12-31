@@ -82,13 +82,26 @@ export function addCategory(categoryData) {
                 return { success: false, error: "Failed to create category" };
             }
         } catch (err) {
-            console.error("Category creation error:", err);
-            console.error("Error response:", err.response?.data);
-            console.error("Error status:", err.response?.status);
-            console.error("Error message:", err.message);
+            console.error("❌ Category creation error:", err);
+            console.error("  - Error response:", err.response?.data);
+            console.error("  - Error status:", err.response?.status);
+            console.error("  - Error message:", err.message);
+            console.error("  - Request config:", {
+                url: err.config?.url,
+                method: err.config?.method,
+                headers: err.config?.headers
+            });
+            
             dispatch(setStatus(STATUS.ERROR));
-            // Return error instead of throwing
-            const errorMessage = err.response?.data?.message || err.response?.data?.error || err.message || "Failed to create category";
+            
+            // Return error with more details
+            let errorMessage = "Failed to create category";
+            if (err.response?.data) {
+                errorMessage = err.response.data.message || err.response.data.error || err.response.data.errorMessage || errorMessage;
+            } else if (err.message) {
+                errorMessage = err.message;
+            }
+            
             return { success: false, error: errorMessage };
         }
     };
