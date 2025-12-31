@@ -57,9 +57,16 @@ export function addCategory(categoryData) {
     return async function addCategoryThunk(dispatch) {
         dispatch(setStatus(STATUS.LOADING));
         try {
-            const response = await APIAuthenticated.post("/api/category", categoryData, {
+            // Convert to FormData for file upload
+            const formData = new FormData();
+            formData.append('categoryName', categoryData.categoryName);
+            if (categoryData.image) {
+                formData.append('image', categoryData.image);
+            }
+            
+            const response = await APIAuthenticated.post("/api/category", formData, {
                 headers: {
-                    'Content-Type': "multipart/form-data"
+                    'Content-Type': 'multipart/form-data'
                 }
             });
             if (response.status === 200) {
@@ -69,8 +76,10 @@ export function addCategory(categoryData) {
                 dispatch(setStatus(STATUS.ERROR));
             }
         } catch (err) {
-            console.error(err);
+            console.error("Category creation error:", err);
+            console.error("Error response:", err.response?.data);
             dispatch(setStatus(STATUS.ERROR));
+            throw err; // Re-throw so component can handle it
         }
     };
 }
