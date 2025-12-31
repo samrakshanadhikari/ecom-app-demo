@@ -6,17 +6,25 @@ import { upload } from "../middleware/multerMiddleware.js"
 const router=Router();
 
 
+// Multer error handler middleware
+const handleMulterError = (err, req, res, next) => {
+    if (err) {
+        console.error("❌ Multer error:", err.message);
+        return res.status(400).json({ 
+            message: "File upload error", 
+            error: err.message 
+        });
+    }
+    next();
+};
+
 router.route("/").post(
     isAuthenticated, 
     restrictTo(Role.Admin),
     (req, res, next) => {
         upload.single('image')(req, res, (err) => {
             if (err) {
-                console.error("❌ Multer error:", err.message);
-                return res.status(400).json({ 
-                    message: "File upload error", 
-                    error: err.message 
-                });
+                return handleMulterError(err, req, res, next);
             }
             next();
         });

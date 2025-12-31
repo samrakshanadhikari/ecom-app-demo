@@ -77,20 +77,41 @@ const AddCategory = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        
+        // Validate category name
+        if (!categoryData.categoryName || categoryData.categoryName.trim() === "") {
+            toast.error("Please enter a category name");
+            return;
+        }
+        
         setIsSubmitting(true);
         
         try {
+            console.log("🚀 Starting category creation...");
+            console.log("  - Category name:", categoryData.categoryName);
+            console.log("  - Has image:", !!categoryData.image);
+            
             const result = await dispatch(addCategory(categoryData));
-            if (result && result.success) {
+            
+            console.log("📥 Dispatch result:", result);
+            
+            // Check if result is a promise that resolved
+            const finalResult = result?.payload || result;
+            
+            if (finalResult && finalResult.success) {
                 toast.success("Category added successfully");
-                navigate("/categoryList");
+                setTimeout(() => {
+                    navigate("/categoryList");
+                }, 500);
             } else {
-                const errorMessage = result?.error || "Error creating category. Please try again.";
+                const errorMessage = finalResult?.error || result?.error || "Error creating category. Please try again.";
+                console.error("❌ Category creation failed:", errorMessage);
                 toast.error(errorMessage);
             }
         } catch (error) {
-            console.error("Category creation failed:", error);
-            toast.error("Error creating category. Please try again.");
+            console.error("❌ Category creation exception:", error);
+            const errorMessage = error?.response?.data?.message || error?.message || "Error creating category. Please try again.";
+            toast.error(errorMessage);
         } finally {
             setIsSubmitting(false);
         }
