@@ -2,27 +2,41 @@ import Category from "../models/categoryModel.js";
 
 // Create category API with image upload
 export const createCategory = async (req, res) => {
-    const userId = req.user.id;
-    const { categoryName } = req.body;
+    try {
+        const userId = req.user.id;
+        const { categoryName } = req.body;
 
-    let categoryImageUrl;
-    if (req.file) {
-        categoryImageUrl = req.file.filename;  
+        if (!categoryName) {
+            return res.status(400).json({ message: "Category name is required" });
+        }
+
+        let categoryImageUrl;
+        if (req.file) {
+            categoryImageUrl = req.file.filename;
+            console.log("✅ File uploaded:", categoryImageUrl);
+        } else {
+            console.log("⚠️ No file uploaded");
+        }
+
+        const existingCategory = await Category.findOne({ categoryName });
+        if (existingCategory) {
+            return res.status(400).json({ message: "Category name must be unique" });
+        }
+
+        const category = await Category.create({
+            categoryName,
+            categoryImageUrl, 
+            userId
+        });
+
+        res.status(200).json({ message: "Category created successfully", data: category });
+    } catch (error) {
+        console.error("❌ Category creation error:", error);
+        res.status(500).json({ 
+            message: "Error creating category", 
+            error: error.message 
+        });
     }
-
-    console.log(categoryImageUrl)
-    const existingCategory = await Category.findOne({ categoryName });
-    if (existingCategory) {
-        return res.status(400).json({ message: "Category name must be unique" });
-    }
-
-    const category = await Category.create({
-        categoryName,
-        categoryImageUrl, 
-        userId
-    });
-
-    res.status(200).json({ message: "Category created successfully", data: category });
 };
 
 

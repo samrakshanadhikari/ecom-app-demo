@@ -1,10 +1,9 @@
 import { Router } from "express";
 import { createProduct, deleteProduct, fetchSingleProduct, getAllProducts, getProductsByCategory, updateProduct } from "../controllers/productController.js";
-import {multer, storage} from "../middleware/multerMiddleware.js"
+import { upload } from "../middleware/multerMiddleware.js"
 import errorHandle from "../services/errorHandler.js";
 import { isAuthenticated, restrictTo, Role } from "../middleware/authMiddleware.js";
 
-const upload=multer({storage : storage});
 const router=Router();
 
 router.route("/create").post(isAuthenticated, restrictTo(Role.Admin), upload.single('image'), errorHandle(createProduct))
