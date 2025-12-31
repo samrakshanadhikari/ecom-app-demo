@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import axios from "axios";
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../../dashboard/sidebar/Sidebar';
 import { FaUpload, FaTag, FaBoxOpen, FaDollarSign, FaStar, FaImage, FaInfoCircle } from 'react-icons/fa';
 import { toast } from 'react-toastify';
-import { API_BASE_URL } from '../../../config/api';
+import { API, APIAuthenticated } from '../../../http';
 
 const AddProduct = () => {
   const navigate = useNavigate();
@@ -26,7 +25,7 @@ const AddProduct = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/api/category/`);
+        const response = await API.get('/api/category/');
         setCategories(response.data.data || response.data); 
       } catch (error) {
         console.error("Error fetching categories:", error);
@@ -67,24 +66,59 @@ const AddProduct = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    const token = localStorage.getItem('token');
     const formData = new FormData();
 
-    for (let key in productData) {
-      formData.append(key, productData[key]);
+    // Append all product data to FormData
+    formData.append('productName', productData.productName);
+    formData.append('productDescription', productData.productDescription);
+    formData.append('productPrice', productData.productPrice);
+    formData.append('productTotalStockQuantity', productData.productTotalStockQuantity);
+    formData.append('category', productData.category);
+    
+    // Only append totalRating if it has a value
+    if (productData.totalRating) {
+      formData.append('totalRating', productData.totalRating);
+    }
+    
+    // Only append image if one was selected
+    if (productData.image) {
+      formData.append('image', productData.image);
     }
 
-    try {
-      const response = await axios.post(`${API_BASE_URL}/api/product/create`, formData, {
-        headers: {
-          Authorization: `${token}`,
-        }
+    // DETAILED DEBUG LOGGING
+    console.log("=== PRODUCT SUBMISSION DEBUG ===");
+    console.log("📤 Product Data State:", productData);
+    console.log("📤 Has Image?:", !!productData.image);
+    if (productData.image) {
+      console.log("📤 Image Details:", {
+        name: productData.image.name,
+        type: productData.image.type,
+        size: productData.image.size,
+        lastModified: productData.image.lastModified
       });
+    }
+    console.log("📤 FormData Entries:");
+    for (let [key, value] of formData.entries()) {
+      if (value instanceof File) {
+        console.log(`  ${key}:`, { name: value.name, type: value.type, size: value.size });
+      } else {
+        console.log(`  ${key}:`, value);
+      }
+    }
+    console.log("================================");
+
+    try {
+      const response = await APIAuthenticated.post('/api/product/create', formData);
+      console.log("✅ Product created:", response.data);
       toast.success("Product added successfully");
       navigate("/listProduct");
     } catch (error) {
-      console.error(error);
-      toast.error("Error creating product. Please try again.");
+      console.error("❌ Error creating product:", error);
+      console.error("❌ Error response:", error.response);
+      console.error("❌ Error status:", error.response?.status);
+      console.error("❌ Error data:", error.response?.data);
+      const errorMessage = error?.response?.data?.message || error?.message || "Error creating product. Please try again.";
+      toast.error(errorMessage);
     } finally {
       setIsSubmitting(false);
     }

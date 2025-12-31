@@ -3,10 +3,22 @@ import Category from "../models/categoryModel.js";
 // Create category API with image upload
 export const createCategory = async (req, res) => {
     try {
-        console.log("📥 Category creation request received");
+        console.log("\n========================================");
+        console.log("📥 CATEGORY CREATION REQUEST");
+        console.log("========================================");
         console.log("  - User ID:", req.user?.id);
-        console.log("  - Body:", req.body);
-        console.log("  - File:", req.file ? req.file.filename : "none");
+        console.log("  - Body:", JSON.stringify(req.body, null, 2));
+        console.log("  - File present?:", !!req.file);
+        if (req.file) {
+            console.log("  - File details:", {
+                filename: req.file.filename,
+                originalname: req.file.originalname,
+                mimetype: req.file.mimetype,
+                size: req.file.size,
+                path: req.file.path
+            });
+        }
+        console.log("========================================\n");
         
         const userId = req.user?.id;
         if (!userId) {

@@ -2,31 +2,86 @@ import Product from "../models/productModel.js"
 
 //creat product api
 export const createProduct = async (req, res) => {
-    const userId=req.user.id;
-    const { productName, productDescription, productPrice, productTotalStockQuantity, totalRating, category } = req.body;
+    try {
+        console.log("\n========================================");
+        console.log("📥 PRODUCT CREATION REQUEST");
+        console.log("========================================");
+        console.log("  - User ID:", req.user?.id);
+        console.log("  - Body:", JSON.stringify(req.body, null, 2));
+        console.log("  - File present?:", !!req.file);
+        if (req.file) {
+            console.log("  - File details:", {
+                filename: req.file.filename,
+                originalname: req.file.originalname,
+                mimetype: req.file.mimetype,
+                size: req.file.size,
+                path: req.file.path
+            });
+        }
+        console.log("========================================\n");
+        
+        const userId = req.user?.id;
+        if (!userId) {
+            return res.status(401).json({ message: "User not authenticated" });
+        }
 
-    
-    let productImageUrl;
-    if (req.file) {
-        productImageUrl = `${req.file.filename}`
+        const { productName, productDescription, productPrice, productTotalStockQuantity, totalRating, category } = req.body;
+
+        // Validate required fields
+        if (!productName || !productDescription || !productPrice || !productTotalStockQuantity || !category) {
+            return res.status(400).json({ message: "All required fields must be provided" });
+        }
+
+        let productImageUrl;
+        if (req.file) {
+            productImageUrl = req.file.filename;
+            console.log("✅ File uploaded:", productImageUrl);
+        } else {
+            console.log("⚠️ No file uploaded (this is okay)");
+        }
+
+        // Check for existing product (case-insensitive)
+        const existingProducts = await Product.findOne({ 
+            productName: { $regex: new RegExp(`^${productName}$`, "i") } 
+        });
+        
+        if (existingProducts) {
+            console.log("⚠️ Product already exists:", existingProducts.productName);
+            return res.status(400).json({ message: "Product name must be unique" });
+        }
+
+        const products = await Product.create({
+            productName,
+            productDescription,
+            productPrice,
+            productTotalStockQuantity,
+            productImageUrl,
+            totalRating: totalRating || undefined,
+            category,
+            userId
+        });
+
+        console.log("✅ Product created successfully:", products._id);
+        res.status(200).json({ message: "Product created successfully", data: products });
+    } catch (error) {
+        console.error("❌ Product creation error:", error);
+        console.error("  - Error name:", error.name);
+        console.error("  - Error message:", error.message);
+        console.error("  - Error stack:", error.stack);
+        
+        // Handle specific MongoDB errors
+        if (error.name === 'ValidationError') {
+            return res.status(400).json({ 
+                message: "Validation error", 
+                error: error.message 
+            });
+        }
+        
+        res.status(500).json({ 
+            message: "Error creating product", 
+            error: error.message 
+        });
     }
-
-    const existingProducts= await Product.findOne({productName})
-    if(existingProducts){
-         res.status(400).json({ message: "Product name must be unique "})
-    }
-
-    const products = await Product.create({
-        productName,
-        productDescription,
-        productPrice,
-        productTotalStockQuantity,
-        productImageUrl,
-        totalRating,
-        category,
-        userId
-    })
-    res.status(200).json({ message: "Product created successfully", data: products })
 }
 
 //fetch all products
@@ -49,18 +104,53 @@ export const fetchSingleProduct = async (req, res) => {
 
 //update product
 export const updateProduct = async (req, res) => {
-    const { id } = req.params;
-    const { productName, productDescription, productPrice, productTotalStockQuantity, totalRating, category } = req.body;
-    let productImageUrl;
-    if (req.file) {
-        productImageUrl = `${req.file.filename}`
-    }
+    try {
+        console.log("📥 Product update request received");
+        console.log("  - Product ID:", req.params.id);
+        console.log("  - Body:", req.body);
+        console.log("  - File:", req.file ? req.file.filename : "none");
+        
+        const { id } = req.params;
+        const { productName, productDescription, productPrice, productTotalStockQuantity, totalRating, category } = req.body;
+        
+        let productImageUrl;
+        if (req.file) {
+            productImageUrl = req.file.filename;
+            console.log("✅ New file uploaded:", productImageUrl);
+        }
 
-    const updateProduct = await Product.findByIdAndUpdate(id, { productName, productDescription, productPrice, productTotalStockQuantity, totalRating, category, productImageUrl }, { new: true })
-    if (!updateProduct) {
-        return res.status(404).json({ message: "Product not found" })
+        const updateData = { 
+            productName, 
+            productDescription, 
+            productPrice, 
+            productTotalStockQuantity, 
+            totalRating, 
+            category 
+        };
+        
+        // Only update image if a new one was provided
+        if (productImageUrl) {
+            updateData.productImageUrl = productImageUrl;
+        }
+
+        const updatedProduct = await Product.findByIdAndUpdate(id, updateData, { new: true });
+        
+        if (!updatedProduct) {
+            console.log("⚠️ Product not found:", id);
+            return res.status(404).json({ message: "Product not found" });
+        }
+
+        console.log("✅ Product updated successfully:", updatedProduct._id);
+        res.status(200).json({ message: "Product updated successfully", data: updatedProduct });
+    } catch (error) {
+        console.error("❌ Product update error:", error);
+        console.error("  - Error message:", error.message);
+        
+        res.status(500).json({ 
+            message: "Error updating product", 
+            error: error.message 
+        });
     }
-    res.status(200).json({ message: "Product update successfully", data: updateProduct })
 }
 
 //delete product

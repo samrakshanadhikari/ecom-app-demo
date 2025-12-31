@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import Sidebar from '../../dashboard/sidebar/Sidebar';
-import { API_BASE_URL, IMAGE_BASE_URL } from '../../../config/api';
+import { API, APIAuthenticated } from '../../../http';
+import { IMAGE_BASE_URL } from '../../../config/api';
 
 const EditProduct = () => {
   const { id } = useParams();  
@@ -22,7 +22,7 @@ const EditProduct = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/api/product/singleProduct/${id}`);
+        const response = await API.get(`/api/product/singleProduct/${id}`);
         const product = response.data.data; 
         setProductData({
           productName: product.productName,
@@ -52,25 +52,33 @@ const EditProduct = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const token = localStorage.getItem('token');
     const formData = new FormData();
 
-    for (let key in productData) { 
-      if (key === 'image' && !productData.image) continue; 
-      formData.append(key, productData[key]);
+    // Append all fields except existingImageUrl which is not needed for the update
+    formData.append('productName', productData.productName);
+    formData.append('productDescription', productData.productDescription);
+    formData.append('productPrice', productData.productPrice);
+    formData.append('productTotalStockQuantity', productData.productTotalStockQuantity);
+    formData.append('totalRating', productData.totalRating);
+    formData.append('category', productData.category);
+    
+    // Only append image if a new one was selected
+    if (productData.image) {
+      formData.append('image', productData.image);
+      console.log("📤 Updating product with new image:", productData.image.name);
+    } else {
+      console.log("📤 Updating product without changing image");
     }
 
     try {
-      await axios.patch(`${API_BASE_URL}/api/product/update/${id}`, formData, {
-        headers: {
-          Authorization: `${token}`,
-        }
-      });
+      const response = await APIAuthenticated.patch(`/api/product/update/${id}`, formData);
+      console.log("✅ Product updated:", response.data);
       alert('Product updated successfully');
       navigate('/listProduct');
     } catch (error) {
-      console.error('Error updating product:', error);
-      alert('Failed to update product');
+      console.error('❌ Error updating product:', error);
+      const errorMessage = error?.response?.data?.message || error?.message || 'Failed to update product';
+      alert(errorMessage);
     }
   };
 
